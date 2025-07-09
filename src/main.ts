@@ -2,7 +2,6 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -31,31 +30,8 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api/v1', { exclude: [''] });
 
-  // Swagger setup
-  const config = new DocumentBuilder()
-    .setTitle('Flower Shop API')
-    .setDescription('API documentation for Flower Shop Backend')
-    .setVersion('1.0')
-    .addBearerAuth()
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/docs', app, document);
-
-  // For Vercel serverless
-  if (process.env.VERCEL) {
-    await app.init();
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return app.getHttpAdapter().getInstance();
-  }
-
   await app.listen(port);
   console.log(`Application is running on: http://localhost:${port}`);
 }
 
-// Export for Vercel
-module.exports = bootstrap;
-
-// For local development
-if (require.main === module) {
-  void bootstrap();
-}
+void bootstrap();

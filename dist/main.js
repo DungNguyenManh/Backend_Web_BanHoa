@@ -4,7 +4,6 @@ const core_1 = require("@nestjs/core");
 const common_1 = require("@nestjs/common");
 const app_module_1 = require("./app.module");
 const config_1 = require("@nestjs/config");
-const swagger_1 = require("@nestjs/swagger");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     const configService = app.get(config_1.ConfigService);
@@ -25,23 +24,8 @@ async function bootstrap() {
         transform: true,
     }));
     app.setGlobalPrefix('api/v1', { exclude: [''] });
-    const config = new swagger_1.DocumentBuilder()
-        .setTitle('Flower Shop API')
-        .setDescription('API documentation for Flower Shop Backend')
-        .setVersion('1.0')
-        .addBearerAuth()
-        .build();
-    const document = swagger_1.SwaggerModule.createDocument(app, config);
-    swagger_1.SwaggerModule.setup('api/docs', app, document);
-    if (process.env.VERCEL) {
-        await app.init();
-        return app.getHttpAdapter().getInstance();
-    }
     await app.listen(port);
     console.log(`Application is running on: http://localhost:${port}`);
 }
-module.exports = bootstrap;
-if (require.main === module) {
-    void bootstrap();
-}
+void bootstrap();
 //# sourceMappingURL=main.js.map
