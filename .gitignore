@@ -1,5 +1,5 @@
 # compiled output
-/dist
+# /dist  # Temporarily commented out for Vercel deployment
 /node_modules
 /build
 
