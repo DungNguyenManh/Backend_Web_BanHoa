@@ -41,12 +41,19 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 
+  // For Vercel serverless
+  if (process.env.VERCEL) {
+    await app.init();
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return app.getHttpAdapter().getInstance();
+  }
+
   await app.listen(port);
   console.log(`Application is running on: http://localhost:${port}`);
 }
 
 // Export for Vercel
-export default bootstrap;
+module.exports = bootstrap;
 
 // For local development
 if (require.main === module) {
