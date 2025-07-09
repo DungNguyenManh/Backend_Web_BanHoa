@@ -13,7 +13,6 @@ async function bootstrap() {
     origin: [
       'http://localhost:3000',     // React/Next.js local
       'http://localhost:5173',     // Vite local
-      'https://your-frontend-domain.vercel.app', // Production frontend
       // Add more frontend URLs as needed
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
