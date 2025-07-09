@@ -19,7 +19,7 @@ exports.DatabaseModule = DatabaseModule = __decorate([
             mongoose_1.MongooseModule.forRootAsync({
                 imports: [config_1.ConfigModule],
                 useFactory: (configService) => ({
-                    uri: configService.get('MONGO_URI'),
+                    uri: configService.get('MONGODB_URI'),
                 }),
                 inject: [config_1.ConfigService],
             }),
