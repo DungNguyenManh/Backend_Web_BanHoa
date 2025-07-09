@@ -1,0 +1,107 @@
+import { IsNotEmpty, IsString, IsNumber, IsOptional, IsArray, IsBoolean, Min, registerDecorator, ValidationOptions } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import { FlowerCategory, isValidCategory } from '../../categories/schemas/category.schema';
+
+// Custom validator cho FlowerCategory
+function IsFlowerCategory(validationOptions?: ValidationOptions) {
+    return function (object: object, propertyName: string) {
+        registerDecorator({
+            name: 'isFlowerCategory',
+            target: object.constructor,
+            propertyName: propertyName,
+            options: validationOptions,
+            validator: {
+                validate(value: string) {
+                    return typeof value === 'string' && isValidCategory(value);
+                },
+                defaultMessage() {
+                    return `Danh mục phải là một trong các giá trị: ${Object.keys(FlowerCategory).join(', ')}`;
+                }
+            }
+        });
+    };
+}
+
+export class CreateFlowerDto {
+    @IsNotEmpty({ message: 'Tên hoa không được để trống' })
+    @IsString()
+    name: string;
+
+    @IsNotEmpty({ message: 'Mô tả không được để trống' })
+    @IsString()
+    description: string;
+
+    @IsNotEmpty({ message: 'Giá gốc không được để trống' })
+    @Type(() => Number)
+    @IsNumber({}, { message: 'Giá gốc phải là số' })
+    @Min(0, { message: 'Giá gốc phải lớn hơn hoặc bằng 0' })
+    originalPrice: number;
+
+    @IsOptional()
+    @Type(() => Number)
+    @IsNumber({}, { message: 'Giá khuyến mãi phải là số' })
+    @Min(0, { message: 'Giá khuyến mãi phải lớn hơn hoặc bằng 0' })
+    salePrice?: number;
+
+    @IsNotEmpty({ message: 'Danh mục không được để trống' })
+    @IsFlowerCategory()
+    category: FlowerCategory;
+
+    @IsOptional()
+    @IsString()
+    imageUrl?: string;
+
+    @IsOptional()
+    @Transform(({ value }) => typeof value === 'string' ? value.split(',') : (value as string[]))
+    @IsArray()
+    @IsString({ each: true })
+    gallery?: string[];
+
+    @IsNotEmpty({ message: 'Số lượng tồn kho không được để trống' })
+    @Type(() => Number)
+    @IsNumber({}, { message: 'Số lượng tồn kho phải là số' })
+    @Min(0, { message: 'Số lượng tồn kho phải lớn hơn hoặc bằng 0' })
+    stock: number;
+
+    @IsOptional()
+    @Transform(({ value }) => value === 'true' || value === true)
+    @IsBoolean()
+    isActive?: boolean;
+
+    @IsOptional()
+    @Transform(({ value }) => value === 'true' || value === true)
+    @IsBoolean()
+    isAvailable?: boolean;
+
+    @IsOptional()
+    @Type(() => Number)
+    @IsNumber({}, { message: 'Trọng lượng phải là số' })
+    @Min(0)
+    weight?: number;
+
+    @IsOptional()
+    @Type(() => Number)
+    @IsNumber({}, { message: 'Chiều cao phải là số' })
+    @Min(0)
+    height?: number;
+
+    @IsOptional()
+    @Type(() => Number)
+    @IsNumber({}, { message: 'Đường kính phải là số' })
+    @Min(0)
+    diameter?: number;
+
+    @IsOptional()
+    @Transform(({ value }) => typeof value === 'string' ? value.split(',') : (value as string[]))
+    @IsArray()
+    @IsString({ each: true })
+    colors?: string[];
+
+    @IsOptional()
+    @IsString()
+    occasion?: string;
+
+    @IsOptional()
+    @IsString()
+    careInstructions?: string;
+}
