@@ -12,7 +12,6 @@ async function bootstrap() {
         origin: [
             'http://localhost:3000',
             'http://localhost:5173',
-            'https://your-frontend-domain.vercel.app',
         ],
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
         allowedHeaders: ['Content-Type', 'Authorization'],
