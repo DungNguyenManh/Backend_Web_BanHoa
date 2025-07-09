@@ -45,9 +45,4 @@ async function bootstrap() {
   console.log(`Application is running on: http://localhost:${port}`);
 }
 
-// For Vercel serverless
-if (process.env.NODE_ENV === 'production') {
-  module.exports = bootstrap();
-} else {
-  void bootstrap();
-}
+void bootstrap();

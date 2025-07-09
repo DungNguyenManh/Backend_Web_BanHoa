@@ -1,0 +1,16 @@
+src
+test
+node_modules
+*.log
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+README.md
+tsconfig.json
+tsconfig.build.json
+nest-cli.json
+.eslintrc.js
+.prettierrc
+jest.config.js
