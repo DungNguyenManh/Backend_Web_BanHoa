@@ -77,7 +77,8 @@ let UsersService = class UsersService {
     }
     async findAll(query, current, pageSize) {
         util_1.UserUtil.validatePaginationParams(current, pageSize);
-        return await util_1.UserUtil.findAllWithPagination(this.userModel, query, current, pageSize);
+        const queryObj = query ? JSON.parse(query) : {};
+        return await util_1.UserUtil.findAllWithPagination(this.userModel, queryObj, current, pageSize);
     }
     async findOne(id) {
         return await this.userModel.findById(id).select('-password');

@@ -28,6 +28,8 @@ export declare class UsersController {
             pageSize: number;
             totalItems: number;
             totalPages: number;
+            hasNext: boolean;
+            hasPrev: boolean;
         };
     }>;
     findOne(id: string): Promise<(import("mongoose").Document<unknown, {}, import("./schemas/user.schema").UserDocument, {}> & import("./schemas/user.schema").User & import("mongoose").Document<unknown, any, any, Record<string, any>> & Required<{

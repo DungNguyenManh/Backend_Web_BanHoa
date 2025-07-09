@@ -2,7 +2,6 @@ import { BadRequestException } from '@nestjs/common';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { UserDocument } from '../schemas/user.schema';
-import aqp from 'api-query-params';
 
 export class UserUtil {
 
@@ -41,20 +40,18 @@ export class UserUtil {
     // Pagination và query util
     static async findAllWithPagination(
         userModel: Model<UserDocument>,
-        query: string,
+        query: Record<string, unknown>,
         current: number,
         pageSize: number
     ) {
-        // Parse query parameters
-        const { filter, sort } = aqp(query);
-
-        // Loại bỏ pagination params khỏi filter
-        if (filter.current) delete filter.current;
-        if (filter.pageSize) delete filter.pageSize;
-
         // Set default values
         const page = current || 1;
         const size = pageSize || 10;
+
+        // Build filter (exclude pagination params)
+        const filter = { ...query };
+        delete filter.current;
+        delete filter.pageSize;
 
         // Tính toán pagination
         const totalItems = await userModel.countDocuments(filter);
@@ -67,7 +64,7 @@ export class UserUtil {
             .limit(size)
             .skip(skip)
             .select('-password') // Loại bỏ password
-            .sort(sort as any)
+            .sort({ createdAt: -1 })
             .lean(); // Để tăng performance
 
         return {
@@ -77,6 +74,8 @@ export class UserUtil {
                 pageSize: size,
                 totalItems,
                 totalPages,
+                hasNext: page < totalPages,
+                hasPrev: page > 1
             }
         };
     }

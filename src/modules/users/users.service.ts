@@ -87,10 +87,13 @@ export class UsersService {
     // Validate pagination parameters
     UserUtil.validatePaginationParams(current, pageSize);
 
+    // Parse query string to object
+    const queryObj: Record<string, unknown> = query ? JSON.parse(query) as Record<string, unknown> : {};
+
     // Sử dụng util để handle pagination và query
     return await UserUtil.findAllWithPagination(
       this.userModel,
-      query,
+      queryObj,
       current,
       pageSize
     );

@@ -11,7 +11,7 @@ export declare class UserUtil {
         phone: string;
         address: string;
     };
-    static findAllWithPagination(userModel: Model<UserDocument>, query: string, current: number, pageSize: number): Promise<{
+    static findAllWithPagination(userModel: Model<UserDocument>, query: Record<string, unknown>, current: number, pageSize: number): Promise<{
         results: (import("mongoose").FlattenMaps<UserDocument> & Required<{
             _id: import("mongoose").FlattenMaps<unknown>;
         }> & {
@@ -22,6 +22,8 @@ export declare class UserUtil {
             pageSize: number;
             totalItems: number;
             totalPages: number;
+            hasNext: boolean;
+            hasPrev: boolean;
         };
     }>;
     static validatePaginationParams(current?: number, pageSize?: number): void;

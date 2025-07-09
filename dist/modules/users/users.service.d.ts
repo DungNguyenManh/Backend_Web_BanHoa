@@ -40,6 +40,8 @@ export declare class UsersService {
             pageSize: number;
             totalItems: number;
             totalPages: number;
+            hasNext: boolean;
+            hasPrev: boolean;
         };
     }>;
     findOne(id: string): Promise<(import("mongoose").Document<unknown, {}, UserDocument, {}> & User & import("mongoose").Document<unknown, any, any, Record<string, any>> & Required<{

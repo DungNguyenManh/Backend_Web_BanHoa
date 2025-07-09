@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserUtil = void 0;
 const common_1 = require("@nestjs/common");
 const bcrypt = require("bcrypt");
-const api_query_params_1 = require("api-query-params");
 class UserUtil {
     static async checkEmailExists(userModel, email) {
         const user = await userModel.findOne({ email }).lean();
@@ -28,13 +27,11 @@ class UserUtil {
         };
     }
     static async findAllWithPagination(userModel, query, current, pageSize) {
-        const { filter, sort } = (0, api_query_params_1.default)(query);
-        if (filter.current)
-            delete filter.current;
-        if (filter.pageSize)
-            delete filter.pageSize;
         const page = current || 1;
         const size = pageSize || 10;
+        const filter = { ...query };
+        delete filter.current;
+        delete filter.pageSize;
         const totalItems = await userModel.countDocuments(filter);
         const totalPages = Math.ceil(totalItems / size);
         const skip = (page - 1) * size;
@@ -43,7 +40,7 @@ class UserUtil {
             .limit(size)
             .skip(skip)
             .select('-password')
-            .sort(sort)
+            .sort({ createdAt: -1 })
             .lean();
         return {
             results,
@@ -52,6 +49,8 @@ class UserUtil {
                 pageSize: size,
                 totalItems,
                 totalPages,
+                hasNext: page < totalPages,
+                hasPrev: page > 1
             }
         };
     }
