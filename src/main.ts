@@ -45,4 +45,10 @@ async function bootstrap() {
   console.log(`Application is running on: http://localhost:${port}`);
 }
 
-void bootstrap();
+// Export for Vercel
+export default bootstrap;
+
+// For local development
+if (require.main === module) {
+  void bootstrap();
+}
