@@ -29,7 +29,7 @@ export declare class UsersService {
             isActive: boolean;
         };
     }>;
-    findAll(query: string, current: number, pageSize: number): Promise<{
+    findAll(query: any, current: number, pageSize: number): Promise<{
         results: (import("mongoose").FlattenMaps<UserDocument> & Required<{
             _id: import("mongoose").FlattenMaps<unknown>;
         }> & {

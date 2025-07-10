@@ -77,7 +77,18 @@ let UsersService = class UsersService {
     }
     async findAll(query, current, pageSize) {
         util_1.UserUtil.validatePaginationParams(current, pageSize);
-        const queryObj = query ? JSON.parse(query) : {};
+        let queryObj = {};
+        if (typeof query === 'string' && query.trim() !== '') {
+            try {
+                queryObj = JSON.parse(query);
+            }
+            catch (e) {
+                throw new common_1.BadRequestException('Query không hợp lệ!');
+            }
+        }
+        else if (typeof query === 'object' && query !== null) {
+            queryObj = query;
+        }
         return await util_1.UserUtil.findAllWithPagination(this.userModel, queryObj, current, pageSize);
     }
     async findOne(id) {

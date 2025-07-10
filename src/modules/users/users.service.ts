@@ -83,12 +83,21 @@ export class UsersService {
     };
   }
 
-  async findAll(query: string, current: number, pageSize: number) {
+  async findAll(query: any, current: number, pageSize: number) {
     // Validate pagination parameters
     UserUtil.validatePaginationParams(current, pageSize);
 
-    // Parse query string to object
-    const queryObj: Record<string, unknown> = query ? JSON.parse(query) as Record<string, unknown> : {};
+    // Xử lý query string hoặc object an toàn
+    let queryObj: Record<string, unknown> = {};
+    if (typeof query === 'string' && query.trim() !== '') {
+      try {
+        queryObj = JSON.parse(query) as Record<string, unknown>;
+      } catch (e) {
+        throw new BadRequestException('Query không hợp lệ!');
+      }
+    } else if (typeof query === 'object' && query !== null) {
+      queryObj = query;
+    }
 
     // Sử dụng util để handle pagination và query
     return await UserUtil.findAllWithPagination(
