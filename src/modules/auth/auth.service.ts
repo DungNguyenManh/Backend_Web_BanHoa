@@ -65,6 +65,7 @@ export class AuthService {
 
         // Register chỉ trả về thông tin user, không có token
         return {
+            success: true,
             message: 'Đăng ký tài khoản thành công',
             user: {
                 _id: String(newUser.data._id),
