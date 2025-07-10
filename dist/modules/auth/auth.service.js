@@ -40,8 +40,12 @@ let AuthService = class AuthService {
     }
     async register(registerDto) {
         console.log('📝 Registering user:', registerDto.email);
+        if (registerDto.password !== registerDto.passwordConfirm) {
+            throw new common_1.BadRequestException('Mật khẩu và xác nhận mật khẩu không khớp');
+        }
+        const { passwordConfirm, ...userDataWithoutConfirm } = registerDto;
         const createUserDto = {
-            ...registerDto,
+            ...userDataWithoutConfirm,
             phone: registerDto.phone || '',
             address: registerDto.address || ''
         };

@@ -6,15 +6,11 @@ import { ConfigService } from '@nestjs/config';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
-  const port = Number(configService.get('PORT')) || 3000;
+  const port = Number(configService.get('PORT')) || 8080;
 
   // Enable CORS for frontend
   app.enableCors({
-    origin: [
-      'http://localhost:3000',     // React/Next.js local
-      'http://localhost:5173',     // Vite local
-      // Add more frontend URLs as needed
-    ],
+    origin: true,  // Allow tất cả origins
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,

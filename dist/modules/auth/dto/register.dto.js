@@ -14,6 +14,7 @@ const class_validator_1 = require("class-validator");
 class RegisterDto {
     email;
     password;
+    passwordConfirm;
     name;
     phone;
     address;
@@ -29,6 +30,10 @@ __decorate([
     (0, class_validator_1.MinLength)(6, { message: 'Mật khẩu phải có ít nhất 6 ký tự' }),
     __metadata("design:type", String)
 ], RegisterDto.prototype, "password", void 0);
+__decorate([
+    (0, class_validator_1.IsNotEmpty)({ message: 'Xác nhận mật khẩu không được để trống' }),
+    __metadata("design:type", String)
+], RegisterDto.prototype, "passwordConfirm", void 0);
 __decorate([
     (0, class_validator_1.IsNotEmpty)({ message: 'Tên không được để trống' }),
     __metadata("design:type", String)

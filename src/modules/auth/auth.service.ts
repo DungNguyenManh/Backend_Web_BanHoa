@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { RegisterDto } from './dto/register.dto';
 import { AuthResponseDto } from './dto/auth-response.dto';
@@ -44,9 +44,18 @@ export class AuthService {
     async register(registerDto: RegisterDto): Promise<RegisterResponseDto> {
         console.log('📝 Registering user:', registerDto.email);
 
+        // Kiểm tra password và passwordConfirm có khớp không
+        if (registerDto.password !== registerDto.passwordConfirm) {
+            throw new BadRequestException('Mật khẩu và xác nhận mật khẩu không khớp');
+        }
+
+        // Loại bỏ passwordConfirm trước khi tạo user
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { passwordConfirm, ...userDataWithoutConfirm } = registerDto;
+
         // Tạo user mới thông qua UsersService (sử dụng register method cho USER role)
         const createUserDto = {
-            ...registerDto,
+            ...userDataWithoutConfirm,
             phone: registerDto.phone || '',
             address: registerDto.address || ''
         };

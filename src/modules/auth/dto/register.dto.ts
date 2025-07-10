@@ -9,6 +9,9 @@ export class RegisterDto {
     @MinLength(6, { message: 'Mật khẩu phải có ít nhất 6 ký tự' })
     password: string;
 
+    @IsNotEmpty({ message: 'Xác nhận mật khẩu không được để trống' })
+    passwordConfirm: string;
+
     @IsNotEmpty({ message: 'Tên không được để trống' })
     name: string;
 
@@ -16,5 +19,5 @@ export class RegisterDto {
     phone?: string;
 
     @IsOptional()
-    address?: string; // ← Đổi thành optional để match CreateUserDto
+    address?: string;
 }

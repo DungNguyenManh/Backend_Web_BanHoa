@@ -7,11 +7,16 @@ const config_1 = require("@nestjs/config");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     const configService = app.get(config_1.ConfigService);
-    const port = Number(configService.get('PORT')) || 3000;
+    const port = Number(configService.get('PORT')) || 8080;
     app.enableCors({
         origin: [
             'http://localhost:3000',
             'http://localhost:5173',
+            'http://localhost:3001',
+            'http://localhost:4173',
+            'https://your-frontend-domain.vercel.app',
+            'https://your-frontend-domain.netlify.app',
+            'https://your-frontend-domain.surge.sh',
         ],
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
         allowedHeaders: ['Content-Type', 'Authorization'],
