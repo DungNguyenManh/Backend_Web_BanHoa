@@ -1,6 +1,7 @@
 import { UserRole } from '../../../shared/decorators/roles.decorator';
 
-export class RegisterResponseDto {
+export interface RegisterResponseDto {
+    success: boolean;
     message: string;
     user: {
         _id: string;
@@ -8,7 +9,7 @@ export class RegisterResponseDto {
         name: string;
         phone?: string;
         address?: string;
-        role: UserRole;
+        role: string;
         isActive: boolean;
     };
 }

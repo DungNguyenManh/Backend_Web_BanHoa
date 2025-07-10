@@ -9,15 +9,7 @@ async function bootstrap() {
     const configService = app.get(config_1.ConfigService);
     const port = Number(configService.get('PORT')) || 8080;
     app.enableCors({
-        origin: [
-            'http://localhost:3000',
-            'http://localhost:5173',
-            'http://localhost:3001',
-            'http://localhost:4173',
-            'https://your-frontend-domain.vercel.app',
-            'https://your-frontend-domain.netlify.app',
-            'https://your-frontend-domain.surge.sh',
-        ],
+        origin: true,
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
         allowedHeaders: ['Content-Type', 'Authorization'],
         credentials: true,

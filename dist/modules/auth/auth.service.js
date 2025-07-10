@@ -52,6 +52,7 @@ let AuthService = class AuthService {
         const newUser = await this.usersService.register(createUserDto);
         console.log('✅ User registered successfully:', newUser.data.email, 'Role:', newUser.data.role, 'Active:', newUser.data.isActive);
         return {
+            success: true,
             message: 'Đăng ký tài khoản thành công',
             user: {
                 _id: String(newUser.data._id),
