@@ -80,11 +80,6 @@ export class CreateFlowerDto {
     @IsBoolean()
     isAvailable?: boolean;
 
-    @IsOptional()
-    @Transform(({ value }) => typeof value === 'string' ? value.split(',') : (value as string[]))
-    @IsArray()
-    @IsString({ each: true })
-    colors?: string[];
 
     @IsOptional()
     @IsString()

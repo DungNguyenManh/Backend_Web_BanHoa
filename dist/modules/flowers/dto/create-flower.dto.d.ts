@@ -9,7 +9,6 @@ export declare class CreateFlowerDto {
     stock: number;
     isActive?: boolean;
     isAvailable?: boolean;
-    colors?: string[];
     occasion?: string;
     careInstructions?: string;
 }
