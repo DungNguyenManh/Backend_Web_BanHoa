@@ -16,9 +16,9 @@ export class FlowersService {
     private cloudinaryService: CloudinaryService,
   ) { }
 
-  // Tạo hoa mới với upload ảnh (BẮT BUỘC phải có ảnh) (ADMIN only)
-  async createWithGallery(createFlowerDto: CreateFlowerDto, images: Express.Multer.File[] = []) {
-    const { name, category, originalPrice, stock } = createFlowerDto;
+  // Tạo hoa mới (ADMIN only) - chỉ nhận imageUrl/gallery, không upload ảnh nữa
+  async createWithGallery(createFlowerDto: CreateFlowerDto) {
+    const { name, category, originalPrice, stock, imageUrl, gallery } = createFlowerDto;
 
     // Kiểm tra tên hoa đã tồn tại chưa
     await FlowerHelper.checkFlowerNameExists(this.flowerModel, name);
@@ -30,50 +30,36 @@ export class FlowersService {
     FlowerHelper.validatePrice(originalPrice);
     FlowerHelper.validateStock(stock);
 
-    // BẮT BUỘC phải có ít nhất 1 ảnh (upload hoặc URL)
-    const hasUploadedImages = images && images.length > 0;
-    const hasImageUrl = createFlowerDto.imageUrl && createFlowerDto.imageUrl.trim().length > 0;
-    const hasGallery = createFlowerDto.gallery && createFlowerDto.gallery.length > 0;
-
-    if (!hasUploadedImages && !hasImageUrl && !hasGallery) {
-      throw new BadRequestException('Vui lòng upload ít nhất 1 ảnh hoặc cung cấp URL ảnh');
-    }
-
-    // Upload ảnh lên Cloudinary với folder theo category (nếu có)
-    const uploadedUrls: string[] = [];
-    let mainImageUrl = '';
-
-    if (hasUploadedImages) {
-      try {
-        const folderName = `flowers/${category.toLowerCase()}`;
-        for (const image of images) {
-          const uploadResult: CloudinaryUploadResult = await this.cloudinaryService.uploadImage(image, folderName, name);
-          uploadedUrls.push(uploadResult.url);
-        }
-
-        // Ảnh đầu tiên làm ảnh chính
-        mainImageUrl = uploadedUrls[0];
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-        throw new BadRequestException(`Lỗi upload ảnh: ${errorMessage}`);
-      }
+    // BẮT BUỘC phải có ít nhất 1 ảnh (imageUrl hoặc gallery)
+    const hasImageUrl = imageUrl && imageUrl.trim().length > 0;
+    const hasGallery = gallery && gallery.length > 0;
+    if (!hasImageUrl && !hasGallery) {
+      throw new BadRequestException('Vui lòng cung cấp ít nhất 1 URL ảnh');
     }
 
     // Tạo hoa mới
     const flowerData = {
       ...createFlowerDto,
       category: category, // Đã validate ở trên, không cần normalize
-      imageUrl: mainImageUrl || createFlowerDto.imageUrl, // Ảnh chính (upload hoặc URL có sẵn)
-      gallery: uploadedUrls.length > 0 ? uploadedUrls : (createFlowerDto.gallery || []), // Gallery (upload hoặc URLs có sẵn)
+      imageUrl: imageUrl, // Ảnh chính (Cloudinary URL)
+      gallery: gallery || [], // Gallery (Cloudinary URLs)
     };
 
     const flower = await this.flowerModel.create(flowerData);
 
     return {
-      message: uploadedUrls.length > 0 ? 'Tạo hoa với ảnh thành công' : 'Tạo hoa thành công',
-      data: flower,
-      uploadedImages: uploadedUrls.length
+      message: 'Tạo hoa thành công',
+      data: flower
     };
+  }
+
+  // API upload ảnh riêng: nhận file, upload lên Cloudinary, trả về URL
+  async uploadImageOnly(image: Express.Multer.File, folder = 'flowers', flowerName?: string) {
+    if (!image) {
+      throw new BadRequestException('Vui lòng chọn file ảnh');
+    }
+    const uploadResult: CloudinaryUploadResult = await this.cloudinaryService.uploadImage(image, folder, flowerName);
+    return uploadResult;
   }
 
   // Lấy danh sách hoa (PUBLIC/USER)
