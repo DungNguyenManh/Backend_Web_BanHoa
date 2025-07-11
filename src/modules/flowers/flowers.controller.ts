@@ -35,6 +35,9 @@ export class FlowersController {
     @Body() createFlowerDto: CreateFlowerDto,
     @UploadedFiles() images?: Express.Multer.File[]
   ) {
+    // Log dữ liệu nhận được để debug lỗi validate
+    console.log('DTO:', createFlowerDto);
+    console.log('Images:', images);
     return await this.flowersService.createWithGallery(createFlowerDto, images || []);
   }
 

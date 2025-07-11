@@ -49,12 +49,14 @@ class CreateFlowerDto {
 exports.CreateFlowerDto = CreateFlowerDto;
 __decorate([
     (0, class_validator_1.IsNotEmpty)({ message: 'Tên hoa không được để trống' }),
-    (0, class_validator_1.IsString)(),
+    (0, class_transformer_1.Transform)(({ value }) => typeof value === 'string' ? value.trim() : String(value)),
+    (0, class_validator_1.IsString)({ message: 'name must be a string' }),
     __metadata("design:type", String)
 ], CreateFlowerDto.prototype, "name", void 0);
 __decorate([
     (0, class_validator_1.IsNotEmpty)({ message: 'Mô tả không được để trống' }),
-    (0, class_validator_1.IsString)(),
+    (0, class_transformer_1.Transform)(({ value }) => typeof value === 'string' ? value.trim() : String(value)),
+    (0, class_validator_1.IsString)({ message: 'description must be a string' }),
     __metadata("design:type", String)
 ], CreateFlowerDto.prototype, "description", void 0);
 __decorate([
@@ -73,6 +75,8 @@ __decorate([
 ], CreateFlowerDto.prototype, "salePrice", void 0);
 __decorate([
     (0, class_validator_1.IsNotEmpty)({ message: 'Danh mục không được để trống' }),
+    (0, class_transformer_1.Transform)(({ value }) => typeof value === 'string' ? value.trim() : String(value)),
+    (0, class_validator_1.IsString)({ message: 'category must be a string' }),
     IsFlowerCategory(),
     __metadata("design:type", String)
 ], CreateFlowerDto.prototype, "category", void 0);

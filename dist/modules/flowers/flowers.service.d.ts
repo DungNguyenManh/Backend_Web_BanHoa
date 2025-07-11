@@ -8,7 +8,7 @@ export declare class FlowersService {
     private flowerModel;
     private cloudinaryService;
     constructor(flowerModel: Model<FlowerDocument>, cloudinaryService: CloudinaryService);
-    createWithGallery(createFlowerDto: CreateFlowerDto): Promise<{
+    createWithGallery(createFlowerDto: CreateFlowerDto, images?: Express.Multer.File[]): Promise<{
         message: string;
         data: import("mongoose").Document<unknown, {}, FlowerDocument, {}> & Flower & import("mongoose").Document<unknown, any, any, Record<string, any>> & Required<{
             _id: unknown;

@@ -27,7 +27,7 @@ let FlowersService = class FlowersService {
         this.flowerModel = flowerModel;
         this.cloudinaryService = cloudinaryService;
     }
-    async createWithGallery(createFlowerDto) {
+    async createWithGallery(createFlowerDto, images = []) {
         const { name, category, originalPrice, stock, imageUrl, gallery } = createFlowerDto;
         await util_1.FlowerHelper.checkFlowerNameExists(this.flowerModel, name);
         if (!(0, category_schema_1.isValidCategory)(category)) {

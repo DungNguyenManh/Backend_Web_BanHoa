@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.FlowersController = void 0;
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
+const platform_express_1 = require("@nestjs/platform-express");
 const flowers_service_1 = require("./flowers.service");
 const create_flower_dto_1 = require("./dto/create-flower.dto");
 const update_flower_dto_1 = require("./dto/update-flower.dto");
@@ -22,13 +23,16 @@ const flower_query_dto_1 = require("./dto/flower-query.dto");
 const jwt_auth_guard_1 = require("../auth/guards/jwt-auth.guard");
 const roles_guard_1 = require("../../shared/guards/roles.guard");
 const roles_decorator_1 = require("../../shared/decorators/roles.decorator");
+const multer_config_1 = require("./config/multer.config");
 let FlowersController = class FlowersController {
     flowersService;
     constructor(flowersService) {
         this.flowersService = flowersService;
     }
-    async create(createFlowerDto) {
-        return await this.flowersService.createWithGallery(createFlowerDto);
+    async create(createFlowerDto, images) {
+        console.log('DTO:', createFlowerDto);
+        console.log('Images:', images);
+        return await this.flowersService.createWithGallery(createFlowerDto, images || []);
     }
     findAll(query) {
         return this.flowersService.findAll(query);
@@ -91,17 +95,20 @@ __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
     (0, roles_decorator_1.Roles)(roles_decorator_1.UserRole.ADMIN),
     (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FilesInterceptor)('images', 1, multer_config_1.multerConfig)),
+    (0, swagger_1.ApiConsumes)('multipart/form-data'),
     (0, swagger_1.ApiOperation)({
-        summary: '[ADMIN] Tạo hoa mới',
-        description: 'Chỉ ADMIN mới có thể tạo hoa mới. Cần đăng nhập và có quyền ADMIN. BẮT BUỘC phải có ít nhất 1 URL ảnh (imageUrl hoặc gallery).'
+        summary: '[ADMIN] Tạo hoa mới với upload ảnh',
+        description: 'Chỉ ADMIN mới có thể tạo hoa mới. Gửi form-data gồm các trường text và file ảnh (field images). Ảnh sẽ được upload lên Cloudinary.'
     }),
     (0, swagger_1.ApiResponse)({ status: 201, description: 'Tạo hoa thành công' }),
     (0, swagger_1.ApiResponse)({ status: 401, description: 'Chưa đăng nhập' }),
     (0, swagger_1.ApiResponse)({ status: 403, description: 'Không có quyền ADMIN' }),
     (0, swagger_1.ApiResponse)({ status: 400, description: 'Dữ liệu không hợp lệ' }),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.UploadedFiles)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_flower_dto_1.CreateFlowerDto]),
+    __metadata("design:paramtypes", [create_flower_dto_1.CreateFlowerDto, Array]),
     __metadata("design:returntype", Promise)
 ], FlowersController.prototype, "create", null);
 __decorate([

@@ -5,7 +5,7 @@ import { FlowerQueryDto } from './dto/flower-query.dto';
 export declare class FlowersController {
     private readonly flowersService;
     constructor(flowersService: FlowersService);
-    create(createFlowerDto: CreateFlowerDto): Promise<{
+    create(createFlowerDto: CreateFlowerDto, images?: Express.Multer.File[]): Promise<{
         message: string;
         data: import("mongoose").Document<unknown, {}, import("./schemas/flower.schema").FlowerDocument, {}> & import("./schemas/flower.schema").Flower & import("mongoose").Document<unknown, any, any, Record<string, any>> & Required<{
             _id: unknown;

@@ -17,7 +17,7 @@ export class FlowersService {
   ) { }
 
   // Tạo hoa mới (ADMIN only) - chỉ nhận imageUrl/gallery, không upload ảnh nữa
-  async createWithGallery(createFlowerDto: CreateFlowerDto) {
+  async createWithGallery(createFlowerDto: CreateFlowerDto, images: Express.Multer.File[] = []) {
     const { name, category, originalPrice, stock, imageUrl, gallery } = createFlowerDto;
 
     // Kiểm tra tên hoa đã tồn tại chưa
