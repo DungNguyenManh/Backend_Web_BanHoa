@@ -53,7 +53,7 @@ __decorate([
 __decorate([
     (0, mongoose_1.Prop)({
         required: true,
-        enum: Object.values(category_schema_1.FlowerCategory)
+        enum: category_schema_1.FlowerCategories
     }),
     __metadata("design:type", String)
 ], Flower.prototype, "category", void 0);

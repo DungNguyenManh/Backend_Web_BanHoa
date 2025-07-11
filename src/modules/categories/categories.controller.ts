@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { FlowerCategory, getAllCategories } from './schemas/category.schema';
+import { getAllCategories } from './schemas/category.schema';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @ApiTags('Categories')

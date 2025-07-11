@@ -57,10 +57,9 @@ let FlowersService = class FlowersService {
                 throw new common_1.BadRequestException(`Lỗi upload ảnh: ${errorMessage}`);
             }
         }
-        const normalizedCategory = (0, category_schema_1.normalizeCategory)(category);
         const flowerData = {
             ...createFlowerDto,
-            category: normalizedCategory,
+            category: category,
             imageUrl: mainImageUrl || createFlowerDto.imageUrl,
             gallery: uploadedUrls.length > 0 ? uploadedUrls : (createFlowerDto.gallery || []),
         };
@@ -155,7 +154,7 @@ let FlowersService = class FlowersService {
         }
         const updateData = { ...updateFlowerDto };
         if (category) {
-            updateData.category = (0, category_schema_1.normalizeCategory)(category);
+            updateData.category = category;
         }
         const updatedFlower = await this.flowerModel
             .findByIdAndUpdate(id, updateData, { new: true });

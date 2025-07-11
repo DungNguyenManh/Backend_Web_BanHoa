@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { FlowerCategory } from '../../categories/schemas/category.schema';
+import { FlowerCategories } from '../../categories/schemas/category.schema';
 
 export type FlowerDocument = Flower & Document;
 
@@ -20,9 +20,9 @@ export class Flower {
 
     @Prop({
         required: true,
-        enum: Object.values(FlowerCategory)
+        enum: FlowerCategories
     })
-    category: FlowerCategory; // Chỉ chấp nhận các giá trị từ enum
+    category: string; // Chỉ chấp nhận các giá trị từ FlowerCategories
 
     @Prop()
     imageUrl?: string; // URL hình ảnh

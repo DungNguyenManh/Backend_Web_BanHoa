@@ -67,7 +67,7 @@ export declare class FlowersController {
         ogImage: string | undefined;
         price: number;
         availability: string;
-        category: import("../categories/schemas/category.schema").FlowerCategory;
+        category: string;
     }>;
     getSitemapData(): Promise<{
         flowers: {

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { FlowerCategory, getAllCategories, isValidCategory } from './schemas/category.schema';
+import { getAllCategories, isValidCategory } from './schemas/category.schema';
 
 @Injectable()
 export class CategoriesService {

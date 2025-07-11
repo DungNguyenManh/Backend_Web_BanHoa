@@ -25,7 +25,7 @@ function IsFlowerCategory(validationOptions) {
                     return typeof value === 'string' && (0, category_schema_1.isValidCategory)(value);
                 },
                 defaultMessage() {
-                    return `Danh mục phải là một trong các giá trị: ${Object.keys(category_schema_1.FlowerCategory).join(', ')}`;
+                    return `Danh mục phải là một trong các giá trị: ${(0, category_schema_1.getAllCategories)().join(', ')}`;
                 }
             }
         });
@@ -42,9 +42,6 @@ class CreateFlowerDto {
     stock;
     isActive;
     isAvailable;
-    weight;
-    height;
-    diameter;
     colors;
     occasion;
     careInstructions;
@@ -110,27 +107,6 @@ __decorate([
     (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
 ], CreateFlowerDto.prototype, "isAvailable", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_transformer_1.Type)(() => Number),
-    (0, class_validator_1.IsNumber)({}, { message: 'Trọng lượng phải là số' }),
-    (0, class_validator_1.Min)(0),
-    __metadata("design:type", Number)
-], CreateFlowerDto.prototype, "weight", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_transformer_1.Type)(() => Number),
-    (0, class_validator_1.IsNumber)({}, { message: 'Chiều cao phải là số' }),
-    (0, class_validator_1.Min)(0),
-    __metadata("design:type", Number)
-], CreateFlowerDto.prototype, "height", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_transformer_1.Type)(() => Number),
-    (0, class_validator_1.IsNumber)({}, { message: 'Đường kính phải là số' }),
-    (0, class_validator_1.Min)(0),
-    __metadata("design:type", Number)
-], CreateFlowerDto.prototype, "diameter", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_transformer_1.Transform)(({ value }) => typeof value === 'string' ? value.split(',') : value),

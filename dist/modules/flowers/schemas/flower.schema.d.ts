@@ -1,12 +1,11 @@
 import { Document } from 'mongoose';
-import { FlowerCategory } from '../../categories/schemas/category.schema';
 export type FlowerDocument = Flower & Document;
 export declare class Flower {
     name: string;
     description: string;
     originalPrice: number;
     salePrice?: number;
-    category: FlowerCategory;
+    category: string;
     imageUrl?: string;
     gallery?: string[];
     stock: number;

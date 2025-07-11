@@ -1,8 +1,8 @@
 import { IsNotEmpty, IsString, IsNumber, IsOptional, IsArray, IsBoolean, Min, registerDecorator, ValidationOptions } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
-import { FlowerCategory, isValidCategory } from '../../categories/schemas/category.schema';
+import { isValidCategory, getAllCategories } from '../../categories/schemas/category.schema';
 
-// Custom validator cho FlowerCategory
+// Custom validator cho category dạng string
 function IsFlowerCategory(validationOptions?: ValidationOptions) {
     return function (object: object, propertyName: string) {
         registerDecorator({
@@ -15,7 +15,7 @@ function IsFlowerCategory(validationOptions?: ValidationOptions) {
                     return typeof value === 'string' && isValidCategory(value);
                 },
                 defaultMessage() {
-                    return `Danh mục phải là một trong các giá trị: ${Object.keys(FlowerCategory).join(', ')}`;
+                    return `Danh mục phải là một trong các giá trị: ${getAllCategories().join(', ')}`;
                 }
             }
         });
@@ -45,7 +45,7 @@ export class CreateFlowerDto {
 
     @IsNotEmpty({ message: 'Danh mục không được để trống' })
     @IsFlowerCategory()
-    category: FlowerCategory;
+    category: string;
 
     @IsOptional()
     @IsString()
@@ -72,24 +72,6 @@ export class CreateFlowerDto {
     @Transform(({ value }) => value === 'true' || value === true)
     @IsBoolean()
     isAvailable?: boolean;
-
-    @IsOptional()
-    @Type(() => Number)
-    @IsNumber({}, { message: 'Trọng lượng phải là số' })
-    @Min(0)
-    weight?: number;
-
-    @IsOptional()
-    @Type(() => Number)
-    @IsNumber({}, { message: 'Chiều cao phải là số' })
-    @Min(0)
-    height?: number;
-
-    @IsOptional()
-    @Type(() => Number)
-    @IsNumber({}, { message: 'Đường kính phải là số' })
-    @Min(0)
-    diameter?: number;
 
     @IsOptional()
     @Transform(({ value }) => typeof value === 'string' ? value.split(',') : (value as string[]))

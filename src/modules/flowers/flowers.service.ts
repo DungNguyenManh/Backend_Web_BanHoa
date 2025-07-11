@@ -5,7 +5,7 @@ import { CreateFlowerDto } from './dto/create-flower.dto';
 import { UpdateFlowerDto } from './dto/update-flower.dto';
 import { FlowerQueryDto } from './dto/flower-query.dto';
 import { Flower, FlowerDocument } from './schemas/flower.schema';
-import { isValidCategory, normalizeCategory } from '../categories/schemas/category.schema';
+import { isValidCategory } from '../categories/schemas/category.schema';
 import { FlowerHelper } from './helpers/util';
 import { CloudinaryService, CloudinaryUploadResult } from '../../cloudinary/cloudinary.service';
 
@@ -60,10 +60,9 @@ export class FlowersService {
     }
 
     // Tạo hoa mới
-    const normalizedCategory = normalizeCategory(category);
     const flowerData = {
       ...createFlowerDto,
-      category: normalizedCategory,
+      category: category, // Đã validate ở trên, không cần normalize
       imageUrl: mainImageUrl || createFlowerDto.imageUrl, // Ảnh chính (upload hoặc URL có sẵn)
       gallery: uploadedUrls.length > 0 ? uploadedUrls : (createFlowerDto.gallery || []), // Gallery (upload hoặc URLs có sẵn)
     };
@@ -205,7 +204,7 @@ export class FlowersService {
     // Normalize category nếu có
     const updateData = { ...updateFlowerDto };
     if (category) {
-      updateData.category = normalizeCategory(category);
+      updateData.category = category; // Đã validate ở trên, không cần normalize
     }
 
     // Cập nhật hoa
