@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 import { User, UserDocument, UserRole } from './schemas/user.schema';
 import { UserUtil } from './helpers/util';
 
@@ -119,6 +120,29 @@ export class UsersService {
 
   async update(id: string, updateUserDto: UpdateUserDto) {
     return await this.userModel.findByIdAndUpdate(id, updateUserDto, { new: true }).select('-password');
+  }
+
+  async changePassword(userId: string, dto: ChangePasswordDto) {
+    const { oldPassword, newPassword, confirmNewPassword } = dto;
+
+    if (newPassword !== confirmNewPassword) {
+      throw new BadRequestException('Xác nhận mật khẩu mới không khớp');
+    }
+
+    const user = await this.userModel.findById(userId);
+    if (!user) throw new BadRequestException('Không tìm thấy user');
+
+    const isMatch = await UserUtil.comparePassword(oldPassword, user.password);
+    if (!isMatch) throw new BadRequestException('Mật khẩu cũ không đúng');
+
+    if (oldPassword === newPassword) {
+      throw new BadRequestException('Mật khẩu mới phải khác mật khẩu cũ');
+    }
+
+    user.password = await UserUtil.hashPassword(newPassword);
+    await user.save();
+
+    return { message: 'Đổi mật khẩu thành công' };
   }
 
   async remove(id: string) {

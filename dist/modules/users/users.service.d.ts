@@ -1,6 +1,7 @@
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 import { User, UserDocument, UserRole } from './schemas/user.schema';
 export declare class UsersService {
     private userModel;
@@ -59,6 +60,9 @@ export declare class UsersService {
     }> & {
         __v: number;
     }) | null>;
+    changePassword(userId: string, dto: ChangePasswordDto): Promise<{
+        message: string;
+    }>;
     remove(id: string): Promise<(import("mongoose").Document<unknown, {}, UserDocument, {}> & User & import("mongoose").Document<unknown, any, any, Record<string, any>> & Required<{
         _id: unknown;
     }> & {

@@ -1,6 +1,7 @@
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 import { UserRole } from '../../shared/decorators/roles.decorator';
 export declare class UsersController {
     private readonly usersService;
@@ -42,6 +43,9 @@ export declare class UsersController {
     }> & {
         __v: number;
     }) | null>;
+    changePassword(req: any, dto: ChangePasswordDto): Promise<{
+        message: string;
+    }>;
     remove(id: string): Promise<(import("mongoose").Document<unknown, {}, import("./schemas/user.schema").UserDocument, {}> & import("./schemas/user.schema").User & import("mongoose").Document<unknown, any, any, Record<string, any>> & Required<{
         _id: unknown;
     }> & {

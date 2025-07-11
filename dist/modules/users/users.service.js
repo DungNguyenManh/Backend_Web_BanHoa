@@ -100,6 +100,24 @@ let UsersService = class UsersService {
     async update(id, updateUserDto) {
         return await this.userModel.findByIdAndUpdate(id, updateUserDto, { new: true }).select('-password');
     }
+    async changePassword(userId, dto) {
+        const { oldPassword, newPassword, confirmNewPassword } = dto;
+        if (newPassword !== confirmNewPassword) {
+            throw new common_1.BadRequestException('Xác nhận mật khẩu mới không khớp');
+        }
+        const user = await this.userModel.findById(userId);
+        if (!user)
+            throw new common_1.BadRequestException('Không tìm thấy user');
+        const isMatch = await util_1.UserUtil.comparePassword(oldPassword, user.password);
+        if (!isMatch)
+            throw new common_1.BadRequestException('Mật khẩu cũ không đúng');
+        if (oldPassword === newPassword) {
+            throw new common_1.BadRequestException('Mật khẩu mới phải khác mật khẩu cũ');
+        }
+        user.password = await util_1.UserUtil.hashPassword(newPassword);
+        await user.save();
+        return { message: 'Đổi mật khẩu thành công' };
+    }
     async remove(id) {
         return await this.userModel.findByIdAndDelete(id);
     }
