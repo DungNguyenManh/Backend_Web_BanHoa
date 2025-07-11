@@ -18,7 +18,7 @@ export class FlowersService {
 
   // Tạo hoa mới (ADMIN only) - chỉ nhận imageUrl/gallery, không upload ảnh nữa
   async createWithGallery(createFlowerDto: CreateFlowerDto, images: Express.Multer.File[] = []) {
-    const { name, category, originalPrice, stock, imageUrl, gallery } = createFlowerDto;
+    const { name, category, originalPrice, stock, imageUrl } = createFlowerDto;
 
     // Kiểm tra tên hoa đã tồn tại chưa
     await FlowerHelper.checkFlowerNameExists(this.flowerModel, name);
@@ -30,19 +30,26 @@ export class FlowersService {
     FlowerHelper.validatePrice(originalPrice);
     FlowerHelper.validateStock(stock);
 
-    // BẮT BUỘC phải có ít nhất 1 ảnh (imageUrl hoặc gallery)
+    // BẮT BUỘC phải có ít nhất 1 ảnh (imageUrl hoặc images upload)
     const hasImageUrl = imageUrl && imageUrl.trim().length > 0;
-    const hasGallery = gallery && gallery.length > 0;
-    if (!hasImageUrl && !hasGallery) {
-      throw new BadRequestException('Vui lòng cung cấp ít nhất 1 URL ảnh');
+    const hasUploadedImages = images && images.length > 0;
+    if (!hasImageUrl && !hasUploadedImages) {
+      throw new BadRequestException('Vui lòng upload ảnh hoặc cung cấp URL ảnh');
+    }
+
+    let finalImageUrl = imageUrl;
+    if (hasUploadedImages) {
+      // Upload ảnh đầu tiên lên Cloudinary
+      const folderName = `flowers/${category.toLowerCase()}`;
+      const uploadResult = await this.cloudinaryService.uploadImage(images[0], folderName, name);
+      finalImageUrl = uploadResult.url;
     }
 
     // Tạo hoa mới
     const flowerData = {
       ...createFlowerDto,
-      category: category, // Đã validate ở trên, không cần normalize
-      imageUrl: imageUrl, // Ảnh chính (Cloudinary URL)
-      gallery: gallery || [], // Gallery (Cloudinary URLs)
+      category: category,
+      imageUrl: finalImageUrl,
     };
 
     const flower = await this.flowerModel.create(flowerData);

@@ -28,7 +28,7 @@ let FlowersService = class FlowersService {
         this.cloudinaryService = cloudinaryService;
     }
     async createWithGallery(createFlowerDto, images = []) {
-        const { name, category, originalPrice, stock, imageUrl, gallery } = createFlowerDto;
+        const { name, category, originalPrice, stock, imageUrl } = createFlowerDto;
         await util_1.FlowerHelper.checkFlowerNameExists(this.flowerModel, name);
         if (!(0, category_schema_1.isValidCategory)(category)) {
             throw new common_1.BadRequestException(`Danh mục "${category}" không hợp lệ`);
@@ -36,15 +36,20 @@ let FlowersService = class FlowersService {
         util_1.FlowerHelper.validatePrice(originalPrice);
         util_1.FlowerHelper.validateStock(stock);
         const hasImageUrl = imageUrl && imageUrl.trim().length > 0;
-        const hasGallery = gallery && gallery.length > 0;
-        if (!hasImageUrl && !hasGallery) {
-            throw new common_1.BadRequestException('Vui lòng cung cấp ít nhất 1 URL ảnh');
+        const hasUploadedImages = images && images.length > 0;
+        if (!hasImageUrl && !hasUploadedImages) {
+            throw new common_1.BadRequestException('Vui lòng upload ảnh hoặc cung cấp URL ảnh');
+        }
+        let finalImageUrl = imageUrl;
+        if (hasUploadedImages) {
+            const folderName = `flowers/${category.toLowerCase()}`;
+            const uploadResult = await this.cloudinaryService.uploadImage(images[0], folderName, name);
+            finalImageUrl = uploadResult.url;
         }
         const flowerData = {
             ...createFlowerDto,
             category: category,
-            imageUrl: imageUrl,
-            gallery: gallery || [],
+            imageUrl: finalImageUrl,
         };
         const flower = await this.flowerModel.create(flowerData);
         return {
