@@ -133,11 +133,10 @@ export class UsersService {
     if (!user) throw new BadRequestException('Không tìm thấy user');
 
     const isMatch = await UserUtil.comparePassword(oldPassword, user.password);
-    if (!isMatch) throw new BadRequestException('Mật khẩu cũ không đúng');
+    if (!isMatch) throw new BadRequestException('Sai mật khẩu');
 
-    if (oldPassword === newPassword) {
-      throw new BadRequestException('Mật khẩu mới phải khác mật khẩu cũ');
-    }
+    const isSame = await UserUtil.comparePassword(newPassword, user.password);
+    if (isSame) throw new BadRequestException('Mật khẩu mới không được trùng với mật khẩu cũ');
 
     user.password = await UserUtil.hashPassword(newPassword);
     await user.save();
