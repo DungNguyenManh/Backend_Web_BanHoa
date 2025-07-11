@@ -23,12 +23,16 @@ function IsFlowerCategory(validationOptions?: ValidationOptions) {
 }
 
 export class CreateFlowerDto {
+
     @IsNotEmpty({ message: 'Tên hoa không được để trống' })
-    @IsString()
+    @Transform(({ value }) => typeof value === 'string' ? value.trim() : String(value))
+    @IsString({ message: 'name must be a string' })
     name: string;
 
+
     @IsNotEmpty({ message: 'Mô tả không được để trống' })
-    @IsString()
+    @Transform(({ value }) => typeof value === 'string' ? value.trim() : String(value))
+    @IsString({ message: 'description must be a string' })
     description: string;
 
     @IsNotEmpty({ message: 'Giá gốc không được để trống' })
@@ -43,7 +47,10 @@ export class CreateFlowerDto {
     @Min(0, { message: 'Giá khuyến mãi phải lớn hơn hoặc bằng 0' })
     salePrice?: number;
 
+
     @IsNotEmpty({ message: 'Danh mục không được để trống' })
+    @Transform(({ value }) => typeof value === 'string' ? value.trim() : String(value))
+    @IsString({ message: 'category must be a string' })
     @IsFlowerCategory()
     category: string;
 
