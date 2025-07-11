@@ -3,20 +3,20 @@ import { CreateFlowerDto } from './dto/create-flower.dto';
 import { UpdateFlowerDto } from './dto/update-flower.dto';
 import { FlowerQueryDto } from './dto/flower-query.dto';
 import { Flower, FlowerDocument } from './schemas/flower.schema';
-import { CloudinaryService } from '../../cloudinary/cloudinary.service';
+import { CloudinaryService, CloudinaryUploadResult } from '../../cloudinary/cloudinary.service';
 export declare class FlowersService {
     private flowerModel;
     private cloudinaryService;
     constructor(flowerModel: Model<FlowerDocument>, cloudinaryService: CloudinaryService);
-    createWithGallery(createFlowerDto: CreateFlowerDto, images?: Express.Multer.File[]): Promise<{
+    createWithGallery(createFlowerDto: CreateFlowerDto): Promise<{
         message: string;
         data: import("mongoose").Document<unknown, {}, FlowerDocument, {}> & Flower & import("mongoose").Document<unknown, any, any, Record<string, any>> & Required<{
             _id: unknown;
         }> & {
             __v: number;
         };
-        uploadedImages: number;
     }>;
+    uploadImageOnly(image: Express.Multer.File, folder?: string, flowerName?: string): Promise<CloudinaryUploadResult>;
     findAll(query?: FlowerQueryDto): Promise<{
         data: (import("mongoose").Document<unknown, {}, FlowerDocument, {}> & Flower & import("mongoose").Document<unknown, any, any, Record<string, any>> & Required<{
             _id: unknown;

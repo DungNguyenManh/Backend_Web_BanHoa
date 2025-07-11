@@ -27,48 +27,37 @@ let FlowersService = class FlowersService {
         this.flowerModel = flowerModel;
         this.cloudinaryService = cloudinaryService;
     }
-    async createWithGallery(createFlowerDto, images = []) {
-        const { name, category, originalPrice, stock } = createFlowerDto;
+    async createWithGallery(createFlowerDto) {
+        const { name, category, originalPrice, stock, imageUrl, gallery } = createFlowerDto;
         await util_1.FlowerHelper.checkFlowerNameExists(this.flowerModel, name);
         if (!(0, category_schema_1.isValidCategory)(category)) {
             throw new common_1.BadRequestException(`Danh mục "${category}" không hợp lệ`);
         }
         util_1.FlowerHelper.validatePrice(originalPrice);
         util_1.FlowerHelper.validateStock(stock);
-        const hasUploadedImages = images && images.length > 0;
-        const hasImageUrl = createFlowerDto.imageUrl && createFlowerDto.imageUrl.trim().length > 0;
-        const hasGallery = createFlowerDto.gallery && createFlowerDto.gallery.length > 0;
-        if (!hasUploadedImages && !hasImageUrl && !hasGallery) {
-            throw new common_1.BadRequestException('Vui lòng upload ít nhất 1 ảnh hoặc cung cấp URL ảnh');
-        }
-        const uploadedUrls = [];
-        let mainImageUrl = '';
-        if (hasUploadedImages) {
-            try {
-                const folderName = `flowers/${category.toLowerCase()}`;
-                for (const image of images) {
-                    const uploadResult = await this.cloudinaryService.uploadImage(image, folderName, name);
-                    uploadedUrls.push(uploadResult.url);
-                }
-                mainImageUrl = uploadedUrls[0];
-            }
-            catch (error) {
-                const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-                throw new common_1.BadRequestException(`Lỗi upload ảnh: ${errorMessage}`);
-            }
+        const hasImageUrl = imageUrl && imageUrl.trim().length > 0;
+        const hasGallery = gallery && gallery.length > 0;
+        if (!hasImageUrl && !hasGallery) {
+            throw new common_1.BadRequestException('Vui lòng cung cấp ít nhất 1 URL ảnh');
         }
         const flowerData = {
             ...createFlowerDto,
             category: category,
-            imageUrl: mainImageUrl || createFlowerDto.imageUrl,
-            gallery: uploadedUrls.length > 0 ? uploadedUrls : (createFlowerDto.gallery || []),
+            imageUrl: imageUrl,
+            gallery: gallery || [],
         };
         const flower = await this.flowerModel.create(flowerData);
         return {
-            message: uploadedUrls.length > 0 ? 'Tạo hoa với ảnh thành công' : 'Tạo hoa thành công',
-            data: flower,
-            uploadedImages: uploadedUrls.length
+            message: 'Tạo hoa thành công',
+            data: flower
         };
+    }
+    async uploadImageOnly(image, folder = 'flowers', flowerName) {
+        if (!image) {
+            throw new common_1.BadRequestException('Vui lòng chọn file ảnh');
+        }
+        const uploadResult = await this.cloudinaryService.uploadImage(image, folder, flowerName);
+        return uploadResult;
     }
     async findAll(query) {
         const { search, category, minPrice, maxPrice, isAvailable, sortBy = 'createdAt', sortOrder = 'desc', page = 1, limit = 10 } = query || {};
