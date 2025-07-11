@@ -13,7 +13,6 @@ exports.UpdateUserDto = void 0;
 const class_validator_1 = require("class-validator");
 class UpdateUserDto {
     email;
-    password;
     name;
     phone;
     address;
@@ -24,10 +23,6 @@ __decorate([
     (0, class_validator_1.IsEmail)({}, { message: 'Email không hợp lệ' }),
     __metadata("design:type", String)
 ], UpdateUserDto.prototype, "email", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    __metadata("design:type", String)
-], UpdateUserDto.prototype, "password", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)

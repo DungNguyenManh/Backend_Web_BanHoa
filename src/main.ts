@@ -7,10 +7,11 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
   const port = Number(configService.get('PORT')) || 8080;
+  const nodeEnv = configService.get('NODE_ENV') || 'development';
 
   // Enable CORS for frontend
   app.enableCors({
-    origin: true,  // Allow tất cả origins
+    origin: true, // Allow tất cả origins (cân nhắc cấu hình lại ở production)
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
@@ -23,10 +24,11 @@ async function bootstrap() {
     transform: true,           // Tự động chuyển đổi type
   }));
 
-  app.setGlobalPrefix('api/v1', { exclude: [''] });
+  // Đặt global prefix cho API
+  app.setGlobalPrefix('api/v1');
 
   await app.listen(port);
-  console.log(`Application is running on: http://localhost:${port}`);
+  console.log(`Application is running on: http://localhost:${port} [${nodeEnv}]`);
 }
 
 void bootstrap();

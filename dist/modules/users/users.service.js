@@ -110,10 +110,10 @@ let UsersService = class UsersService {
             throw new common_1.BadRequestException('Không tìm thấy user');
         const isMatch = await util_1.UserUtil.comparePassword(oldPassword, user.password);
         if (!isMatch)
-            throw new common_1.BadRequestException('Mật khẩu cũ không đúng');
-        if (oldPassword === newPassword) {
-            throw new common_1.BadRequestException('Mật khẩu mới phải khác mật khẩu cũ');
-        }
+            throw new common_1.BadRequestException('Sai mật khẩu');
+        const isSame = await util_1.UserUtil.comparePassword(newPassword, user.password);
+        if (isSame)
+            throw new common_1.BadRequestException('Mật khẩu mới không được trùng với mật khẩu cũ');
         user.password = await util_1.UserUtil.hashPassword(newPassword);
         await user.save();
         return { message: 'Đổi mật khẩu thành công' };

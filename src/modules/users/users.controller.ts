@@ -42,9 +42,10 @@ export class UsersController {
     return this.usersService.update(id, updateUserDto);
   }
 
-  @UseGuards(JwtAuthGuard)
+  // Đổi mật khẩu cho user đang đăng nhập (KHÔNG bị RolesGuard chặn)
   @Patch('change-password')
-  async changePassword(@Req() req, @Body() dto: ChangePasswordDto) {
+  @UseGuards(JwtAuthGuard)
+  async changePassword(@Req() req: any, @Body() dto: ChangePasswordDto) {
     return this.usersService.changePassword(req.user._id, dto);
   }
 
