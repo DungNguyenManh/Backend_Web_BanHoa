@@ -115,9 +115,9 @@ __decorate([
     (0, common_1.Get)(),
     (0, swagger_1.ApiOperation)({
         summary: '[PUBLIC] Lấy danh sách hoa',
-        description: 'Lấy danh sách hoa với các bộ lọc. Không cần đăng nhập.'
+        description: 'Lấy danh sách hoa với các bộ lọc. Không cần đăng nhập.\n\nTìm kiếm bằng ?search=keyword sẽ tìm theo tên hoặc mô tả.'
     }),
-    (0, swagger_1.ApiQuery)({ name: 'search', required: false, description: 'Tìm kiếm theo tên hoặc mô tả' }),
+    (0, swagger_1.ApiQuery)({ name: 'search', required: false, description: 'Từ khóa tìm kiếm theo tên hoặc mô tả (ví dụ: ?search=hoa hồng)' }),
     (0, swagger_1.ApiQuery)({ name: 'category', required: false, description: 'Lọc theo danh mục (key enum: HOA_BO, HOA_SAP, etc.)' }),
     (0, swagger_1.ApiQuery)({ name: 'minPrice', required: false, description: 'Giá tối thiểu' }),
     (0, swagger_1.ApiQuery)({ name: 'maxPrice', required: false, description: 'Giá tối đa' }),

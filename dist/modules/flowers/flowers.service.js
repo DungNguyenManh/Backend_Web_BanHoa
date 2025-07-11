@@ -67,7 +67,7 @@ let FlowersService = class FlowersService {
     async findAll(query) {
         const { search, category, minPrice, maxPrice, isAvailable, sortBy = 'createdAt', sortOrder = 'desc', page = 1, limit = 10 } = query || {};
         const filter = { isActive: true };
-        if (search) {
+        if (search && search.trim().length > 0) {
             filter.$or = [
                 { name: { $regex: search, $options: 'i' } },
                 { description: { $regex: search, $options: 'i' } }

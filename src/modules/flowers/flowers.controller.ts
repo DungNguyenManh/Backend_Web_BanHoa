@@ -45,9 +45,9 @@ export class FlowersController {
   @Get()
   @ApiOperation({
     summary: '[PUBLIC] Lấy danh sách hoa',
-    description: 'Lấy danh sách hoa với các bộ lọc. Không cần đăng nhập.'
+    description: 'Lấy danh sách hoa với các bộ lọc. Không cần đăng nhập.\n\nTìm kiếm bằng ?search=keyword sẽ tìm theo tên hoặc mô tả.'
   })
-  @ApiQuery({ name: 'search', required: false, description: 'Tìm kiếm theo tên hoặc mô tả' })
+  @ApiQuery({ name: 'search', required: false, description: 'Từ khóa tìm kiếm theo tên hoặc mô tả (ví dụ: ?search=hoa hồng)' })
   @ApiQuery({ name: 'category', required: false, description: 'Lọc theo danh mục (key enum: HOA_BO, HOA_SAP, etc.)' })
   @ApiQuery({ name: 'minPrice', required: false, description: 'Giá tối thiểu' })
   @ApiQuery({ name: 'maxPrice', required: false, description: 'Giá tối đa' })
@@ -55,6 +55,7 @@ export class FlowersController {
   @ApiQuery({ name: 'limit', required: false, description: 'Số lượng mỗi trang (mặc định: 10)' })
   @ApiResponse({ status: 200, description: 'Danh sách hoa' })
   findAll(@Query() query: FlowerQueryDto) {
+    // Đảm bảo search hoạt động như keyword
     return this.flowersService.findAll(query);
   }
 

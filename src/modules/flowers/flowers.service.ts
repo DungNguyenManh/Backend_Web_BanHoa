@@ -84,9 +84,10 @@ export class FlowersService {
     } = query || {};
 
     // Build filter
-    const filter: Record<string, unknown> = { isActive: true }; // Chỉ hiển thị hoa active
+    const filter: Record<string, unknown> = { isActive: true };
 
-    if (search) {
+    // Tìm kiếm theo search (từ khóa)
+    if (search && search.trim().length > 0) {
       filter.$or = [
         { name: { $regex: search, $options: 'i' } },
         { description: { $regex: search, $options: 'i' } }
@@ -99,13 +100,11 @@ export class FlowersService {
 
     if (minPrice || maxPrice) {
       filter.$or = [
-        // Nếu có salePrice thì so sánh với salePrice
         {
           salePrice: { $exists: true },
           ...(minPrice && { salePrice: { $gte: minPrice } }),
           ...(maxPrice && { salePrice: { $lte: maxPrice } })
         },
-        // Nếu không có salePrice thì so sánh với originalPrice
         {
           salePrice: { $exists: false },
           ...(minPrice && { originalPrice: { $gte: minPrice } }),
