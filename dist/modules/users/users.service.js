@@ -103,17 +103,32 @@ let UsersService = class UsersService {
     async changePassword(userId, dto) {
         const { oldPassword, newPassword, confirmNewPassword } = dto;
         if (newPassword !== confirmNewPassword) {
-            throw new common_1.BadRequestException('Xác nhận mật khẩu mới không khớp');
+            throw new common_1.BadRequestException({
+                message: 'Xác nhận mật khẩu mới không khớp',
+                errors: { confirmNewPassword: 'Xác nhận mật khẩu mới không khớp' }
+            });
         }
         const user = await this.userModel.findById(userId);
-        if (!user)
-            throw new common_1.BadRequestException('Không tìm thấy user');
+        if (!user) {
+            throw new common_1.BadRequestException({
+                message: 'Không tìm thấy user',
+                errors: { oldPassword: 'Không tìm thấy user' }
+            });
+        }
         const isMatch = await util_1.UserUtil.comparePassword(oldPassword, user.password);
-        if (!isMatch)
-            throw new common_1.BadRequestException('Sai mật khẩu');
+        if (!isMatch) {
+            throw new common_1.BadRequestException({
+                message: 'Sai mật khẩu',
+                errors: { oldPassword: 'Sai mật khẩu' }
+            });
+        }
         const isSame = await util_1.UserUtil.comparePassword(newPassword, user.password);
-        if (isSame)
-            throw new common_1.BadRequestException('Mật khẩu mới không được trùng với mật khẩu cũ');
+        if (isSame) {
+            throw new common_1.BadRequestException({
+                message: 'Mật khẩu mới không được trùng với mật khẩu cũ',
+                errors: { newPassword: 'Mật khẩu mới không được trùng với mật khẩu cũ' }
+            });
+        }
         user.password = await util_1.UserUtil.hashPassword(newPassword);
         await user.save();
         return { message: 'Đổi mật khẩu thành công' };

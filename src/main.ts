@@ -20,7 +20,7 @@ async function bootstrap() {
   // Bật validation globally
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,           // Loại bỏ thuộc tính không có trong DTO
-    forbidNonWhitelisted: true, // Throw error nếu có thuộc tính không hợp lệ
+    forbidNonWhitelisted: false, // Throw error nếu có thuộc tính không hợp lệ
     transform: true,           // Tự động chuyển đổi type
   }));
 
