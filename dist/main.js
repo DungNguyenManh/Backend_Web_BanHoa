@@ -8,7 +8,6 @@ async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     const configService = app.get(config_1.ConfigService);
     const port = Number(configService.get('PORT')) || 8080;
-    const nodeEnv = configService.get('NODE_ENV') || 'development';
     app.enableCors({
         origin: true,
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
@@ -17,12 +16,12 @@ async function bootstrap() {
     });
     app.useGlobalPipes(new common_1.ValidationPipe({
         whitelist: true,
-        forbidNonWhitelisted: false,
+        forbidNonWhitelisted: true,
         transform: true,
     }));
-    app.setGlobalPrefix('api/v1');
+    app.setGlobalPrefix('api/v1', { exclude: [''] });
     await app.listen(port);
-    console.log(`Application is running on: http://localhost:${port} [${nodeEnv}]`);
+    console.log(`Application is running on: http://localhost:${port}`);
 }
 void bootstrap();
 //# sourceMappingURL=main.js.map

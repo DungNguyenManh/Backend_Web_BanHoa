@@ -3,7 +3,6 @@ export enum FlowerCategory {
     HOA_BO = 'Hoa bó',
     HOA_SAP = 'Hoa sáp',
     HOA_KHAI_TRUONG = 'Hoa khai trương',
-    HOA_VIP_PRO = 'Hoa Vip Pro',
     HOA_SINH_NHAT = 'Hoa sinh nhật',
     HOA_CHUC_MUNG = 'Hoa chúc mừng',
     CHAU_HOA_LAN_HO_DIEP = 'Chậu Hoa Lan Hồ Điệp',

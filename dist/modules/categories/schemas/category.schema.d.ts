@@ -2,7 +2,6 @@ export declare enum FlowerCategory {
     HOA_BO = "Hoa b\u00F3",
     HOA_SAP = "Hoa s\u00E1p",
     HOA_KHAI_TRUONG = "Hoa khai tr\u01B0\u01A1ng",
-    HOA_VIP_PRO = "Hoa Vip Pro",
     HOA_SINH_NHAT = "Hoa sinh nh\u1EADt",
     HOA_CHUC_MUNG = "Hoa ch\u00FAc m\u1EEBng",
     CHAU_HOA_LAN_HO_DIEP = "Ch\u1EADu Hoa Lan H\u1ED3 \u0110i\u1EC7p",
