@@ -38,7 +38,6 @@ export class UsersController {
 
   // Chỉ ADMIN mới được cập nhật user
   @Patch(':id')
-  @Roles(UserRole.ADMIN)
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }
