@@ -126,17 +126,35 @@ export class UsersService {
     const { oldPassword, newPassword, confirmNewPassword } = dto;
 
     if (newPassword !== confirmNewPassword) {
-      throw new BadRequestException('Xác nhận mật khẩu mới không khớp');
+      throw new BadRequestException({
+        message: 'Xác nhận mật khẩu mới không khớp',
+        errors: { confirmNewPassword: 'Xác nhận mật khẩu mới không khớp' }
+      });
     }
 
     const user = await this.userModel.findById(userId);
-    if (!user) throw new BadRequestException('Không tìm thấy user');
+    if (!user) {
+      throw new BadRequestException({
+        message: 'Không tìm thấy user',
+        errors: { oldPassword: 'Không tìm thấy user' }
+      });
+    }
 
     const isMatch = await UserUtil.comparePassword(oldPassword, user.password);
-    if (!isMatch) throw new BadRequestException('Sai mật khẩu');
+    if (!isMatch) {
+      throw new BadRequestException({
+        message: 'Sai mật khẩu',
+        errors: { oldPassword: 'Sai mật khẩu' }
+      });
+    }
 
     const isSame = await UserUtil.comparePassword(newPassword, user.password);
-    if (isSame) throw new BadRequestException('Mật khẩu mới không được trùng với mật khẩu cũ');
+    if (isSame) {
+      throw new BadRequestException({
+        message: 'Mật khẩu mới không được trùng với mật khẩu cũ',
+        errors: { newPassword: 'Mật khẩu mới không được trùng với mật khẩu cũ' }
+      });
+    }
 
     user.password = await UserUtil.hashPassword(newPassword);
     await user.save();
