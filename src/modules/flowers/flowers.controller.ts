@@ -16,23 +16,26 @@ import { FormDataInterceptor } from './interceptors/form-data.interceptor';
 export class FlowersController {
   constructor(private readonly flowersService: FlowersService) { }
 
-  // ❌ CHỈ ADMIN - Tạo hoa mới (chỉ nhận URL ảnh, không upload file)
+  // ❌ CHỈ ADMIN - Tạo hoa mới với upload ảnh (multipart/form-data)
   @Post()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
   @ApiBearerAuth()
+  @UseInterceptors(FilesInterceptor('images', 1, multerConfig))
+  @ApiConsumes('multipart/form-data')
   @ApiOperation({
-    summary: '[ADMIN] Tạo hoa mới',
-    description: 'Chỉ ADMIN mới có thể tạo hoa mới. Cần đăng nhập và có quyền ADMIN. BẮT BUỘC phải có ít nhất 1 URL ảnh (imageUrl hoặc gallery).' 
+    summary: '[ADMIN] Tạo hoa mới với upload ảnh',
+    description: 'Chỉ ADMIN mới có thể tạo hoa mới. Gửi form-data gồm các trường text và file ảnh (field images). Ảnh sẽ được upload lên Cloudinary.'
   })
   @ApiResponse({ status: 201, description: 'Tạo hoa thành công' })
   @ApiResponse({ status: 401, description: 'Chưa đăng nhập' })
   @ApiResponse({ status: 403, description: 'Không có quyền ADMIN' })
   @ApiResponse({ status: 400, description: 'Dữ liệu không hợp lệ' })
   async create(
-    @Body() createFlowerDto: CreateFlowerDto
+    @Body() createFlowerDto: CreateFlowerDto,
+    @UploadedFiles() images?: Express.Multer.File[]
   ) {
-    return await this.flowersService.createWithGallery(createFlowerDto);
+    return await this.flowersService.createWithGallery(createFlowerDto, images || []);
   }
 
   // ✅ PUBLIC - Xem danh sách hoa (không cần login)
