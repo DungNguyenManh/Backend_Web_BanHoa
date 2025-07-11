@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Put, Param, Delete, Query, UseGuards, Req } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -37,16 +37,17 @@ export class UsersController {
     return this.usersService.findOne(id);
   }
 
+  // Đổi mật khẩu cho user đang đăng nhập (KHÔNG bị RolesGuard chặn)
+  @Put('change-password')
+  @UseGuards(JwtAuthGuard)
+  async changePassword(@Req() req: { user: { _id: string } }, @Body() dto: ChangePasswordDto) {
+    // Đảm bảo chỉ user đã đăng nhập mới đổi được mật khẩu của chính mình
+    return this.usersService.changePassword(req.user._id, dto);
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
-  }
-
-  // Đổi mật khẩu cho user đang đăng nhập (KHÔNG bị RolesGuard chặn)
-  @Patch('change-password')
-  @UseGuards(JwtAuthGuard)
-  async changePassword(@Req() req: any, @Body() dto: ChangePasswordDto) {
-    return this.usersService.changePassword(req.user._id, dto);
   }
 
   // Chỉ ADMIN mới được xóa user

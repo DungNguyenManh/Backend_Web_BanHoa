@@ -38,14 +38,18 @@ export declare class UsersController {
     }> & {
         __v: number;
     }) | null>;
+    changePassword(req: {
+        user: {
+            _id: string;
+        };
+    }, dto: ChangePasswordDto): Promise<{
+        message: string;
+    }>;
     update(id: string, updateUserDto: UpdateUserDto): Promise<(import("mongoose").Document<unknown, {}, import("./schemas/user.schema").UserDocument, {}> & import("./schemas/user.schema").User & import("mongoose").Document<unknown, any, any, Record<string, any>> & Required<{
         _id: unknown;
     }> & {
         __v: number;
     }) | null>;
-    changePassword(req: any, dto: ChangePasswordDto): Promise<{
-        message: string;
-    }>;
     remove(id: string): Promise<(import("mongoose").Document<unknown, {}, import("./schemas/user.schema").UserDocument, {}> & import("./schemas/user.schema").User & import("mongoose").Document<unknown, any, any, Record<string, any>> & Required<{
         _id: unknown;
     }> & {

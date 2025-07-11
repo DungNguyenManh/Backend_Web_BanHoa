@@ -35,11 +35,11 @@ let UsersController = class UsersController {
     findOne(id) {
         return this.usersService.findOne(id);
     }
-    update(id, updateUserDto) {
-        return this.usersService.update(id, updateUserDto);
-    }
     async changePassword(req, dto) {
         return this.usersService.changePassword(req.user._id, dto);
+    }
+    update(id, updateUserDto) {
+        return this.usersService.update(id, updateUserDto);
     }
     remove(id) {
         return this.usersService.remove(id);
@@ -79,15 +79,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "findOne", null);
 __decorate([
-    (0, common_1.Patch)(':id'),
-    __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_user_dto_1.UpdateUserDto]),
-    __metadata("design:returntype", void 0)
-], UsersController.prototype, "update", null);
-__decorate([
-    (0, common_1.Patch)('change-password'),
+    (0, common_1.Put)('change-password'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.Body)()),
@@ -95,6 +87,14 @@ __decorate([
     __metadata("design:paramtypes", [Object, change_password_dto_1.ChangePasswordDto]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "changePassword", null);
+__decorate([
+    (0, common_1.Patch)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, update_user_dto_1.UpdateUserDto]),
+    __metadata("design:returntype", void 0)
+], UsersController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
     (0, roles_decorator_1.Roles)(roles_decorator_1.UserRole.ADMIN),
