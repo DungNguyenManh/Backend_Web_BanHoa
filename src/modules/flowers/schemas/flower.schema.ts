@@ -30,9 +30,6 @@ export class Flower {
     @Prop([String])
     gallery?: string[]; // Nhiều hình ảnh
 
-    @Prop({ required: true, min: 0, default: 0 })
-    stock: number; // Số lượng tồn kho
-
     @Prop({ default: true })
     isActive: boolean; // Có hiển thị không
 

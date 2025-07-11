@@ -24,18 +24,12 @@ class FlowerHelper {
             price: flower.price,
             category: flower.category,
             image: flower.image,
-            stock: flower.stock,
             isAvailable: flower.isAvailable,
         };
     }
     static validatePrice(price) {
         if (price <= 0) {
             throw new common_1.BadRequestException('Giá hoa phải lớn hơn 0');
-        }
-    }
-    static validateStock(stock) {
-        if (stock < 0) {
-            throw new common_1.BadRequestException('Số lượng hoa không thể âm');
         }
     }
 }

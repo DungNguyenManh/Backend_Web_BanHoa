@@ -64,11 +64,6 @@ export class CreateFlowerDto {
     @IsString({ each: true })
     gallery?: string[];
 
-    @IsNotEmpty({ message: 'Số lượng tồn kho không được để trống' })
-    @Type(() => Number)
-    @IsNumber({}, { message: 'Số lượng tồn kho phải là số' })
-    @Min(0, { message: 'Số lượng tồn kho phải lớn hơn hoặc bằng 0' })
-    stock: number;
 
     @IsOptional()
     @Transform(({ value }) => value === 'true' || value === true)

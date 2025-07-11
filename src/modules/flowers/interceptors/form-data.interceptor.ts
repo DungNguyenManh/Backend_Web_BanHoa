@@ -8,7 +8,7 @@ export class FormDataInterceptor implements NestInterceptor {
 
     if (request.body) {
       // Chuyển đổi các string số thành number
-      const numericFields = ['originalPrice', 'salePrice', 'stock', 'weight', 'height', 'diameter'];
+      const numericFields = ['originalPrice', 'salePrice', 'weight', 'height', 'diameter'];
       const booleanFields = ['isActive', 'isAvailable'];
       const arrayFields = ['colors', 'gallery'];
 

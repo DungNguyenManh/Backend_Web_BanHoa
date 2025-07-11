@@ -20,7 +20,6 @@ let Flower = class Flower {
     category;
     imageUrl;
     gallery;
-    stock;
     isActive;
     isAvailable;
     weight;
@@ -65,10 +64,6 @@ __decorate([
     (0, mongoose_1.Prop)([String]),
     __metadata("design:type", Array)
 ], Flower.prototype, "gallery", void 0);
-__decorate([
-    (0, mongoose_1.Prop)({ required: true, min: 0, default: 0 }),
-    __metadata("design:type", Number)
-], Flower.prototype, "stock", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ default: true }),
     __metadata("design:type", Boolean)

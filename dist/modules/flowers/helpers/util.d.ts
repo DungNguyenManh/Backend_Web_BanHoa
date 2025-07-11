@@ -9,9 +9,7 @@ export declare class FlowerHelper {
         price: any;
         category: any;
         image: any;
-        stock: any;
         isAvailable: any;
     };
     static validatePrice(price: number): void;
-    static validateStock(stock: number): void;
 }

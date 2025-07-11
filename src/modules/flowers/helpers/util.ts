@@ -31,7 +31,6 @@ export class FlowerHelper {
             price: flower.price,
             category: flower.category,
             image: flower.image,
-            stock: flower.stock,
             isAvailable: flower.isAvailable,
         };
     }
@@ -40,13 +39,6 @@ export class FlowerHelper {
     static validatePrice(price: number): void {
         if (price <= 0) {
             throw new BadRequestException('Giá hoa phải lớn hơn 0');
-        }
-    }
-
-    // Validate stock
-    static validateStock(stock: number): void {
-        if (stock < 0) {
-            throw new BadRequestException('Số lượng hoa không thể âm');
         }
     }
 }

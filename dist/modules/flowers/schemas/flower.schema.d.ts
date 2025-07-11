@@ -8,7 +8,6 @@ export declare class Flower {
     category: string;
     imageUrl?: string;
     gallery?: string[];
-    stock: number;
     isActive: boolean;
     isAvailable: boolean;
     weight?: number;

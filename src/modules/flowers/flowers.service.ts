@@ -18,7 +18,7 @@ export class FlowersService {
 
   // Tạo hoa mới (ADMIN only) - chỉ nhận imageUrl/gallery, không upload ảnh nữa
   async createWithGallery(createFlowerDto: CreateFlowerDto, images: Express.Multer.File[] = []) {
-    const { name, category, originalPrice, stock, imageUrl } = createFlowerDto;
+    const { name, category, originalPrice, imageUrl } = createFlowerDto;
 
     // Kiểm tra tên hoa đã tồn tại chưa
     await FlowerHelper.checkFlowerNameExists(this.flowerModel, name);
@@ -28,7 +28,6 @@ export class FlowersService {
       throw new BadRequestException(`Danh mục "${category}" không hợp lệ`);
     }
     FlowerHelper.validatePrice(originalPrice);
-    FlowerHelper.validateStock(stock);
 
     // BẮT BUỘC phải có ít nhất 1 ảnh (imageUrl hoặc images upload)
     const hasImageUrl = imageUrl && imageUrl.trim().length > 0;
@@ -115,9 +114,6 @@ export class FlowersService {
 
     if (isAvailable !== undefined) {
       filter.isAvailable = isAvailable;
-      if (isAvailable) {
-        filter.stock = { $gt: 0 };
-      }
     }
 
     // Build sort
@@ -173,7 +169,7 @@ export class FlowersService {
     // Kiểm tra hoa có tồn tại không
     await FlowerHelper.checkFlowerExists(this.flowerModel, id);
 
-    const { name, category, originalPrice, stock } = updateFlowerDto;
+    const { name, category, originalPrice } = updateFlowerDto;
 
     // Kiểm tra tên hoa đã tồn tại chưa (trừ chính nó)
     if (name) {
@@ -188,9 +184,6 @@ export class FlowersService {
     // Validate dữ liệu
     if (originalPrice !== undefined) {
       FlowerHelper.validatePrice(originalPrice);
-    }
-    if (stock !== undefined) {
-      FlowerHelper.validateStock(stock);
     }
 
     // Normalize category nếu có
@@ -220,26 +213,6 @@ export class FlowersService {
     return {
       message: 'Xóa hoa thành công'
     };
-  }
-
-  // Cập nhật số lượng tồn kho (internal use)
-  async updateStock(id: string, quantity: number) {
-    const flower = await this.flowerModel.findById(id);
-    if (!flower) {
-      throw new NotFoundException('Hoa không tồn tại');
-    }
-
-    if (flower.stock < quantity) {
-      throw new BadRequestException('Không đủ hàng trong kho');
-    }
-
-    flower.stock -= quantity;
-    if (flower.stock === 0) {
-      flower.isAvailable = false;
-    }
-
-    await flower.save();
-    return flower;
   }
 
   // Lấy hoa bán chạy

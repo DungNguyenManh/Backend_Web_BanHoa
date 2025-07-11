@@ -39,9 +39,6 @@ export class CartService {
         if (!flower.isActive || !flower.isAvailable) {
             throw new BadRequestException('Hoa này hiện không khả dụng');
         }
-        if (flower.stock < quantity) {
-            throw new BadRequestException(`Chỉ còn ${flower.stock} sản phẩm trong kho`);
-        }
 
         // Lấy hoặc tạo giỏ hàng
         let cart = await this.cartModel.findOne({ userId });
@@ -57,9 +54,6 @@ export class CartService {
         if (existingItemIndex >= 0) {
             // Cập nhật số lượng nếu đã có
             const newQuantity = cart.items[existingItemIndex].quantity + quantity;
-            if (flower.stock < newQuantity) {
-                throw new BadRequestException(`Chỉ còn ${flower.stock} sản phẩm trong kho`);
-            }
             cart.items[existingItemIndex].quantity = newQuantity;
         } else {
             // Thêm mới nếu chưa có
@@ -101,11 +95,7 @@ export class CartService {
             throw new BadRequestException('Số lượng không được để trống');
         }
 
-        // Kiểm tra số lượng trong kho
-        const flower = await this.flowerModel.findById(flowerId);
-        if (!flower || flower.stock < quantity) {
-            throw new BadRequestException(`Chỉ còn ${flower?.stock || 0} sản phẩm trong kho`);
-        }
+        // Không kiểm tra số lượng tồn kho nữa
 
         cart.items[itemIndex].quantity = quantity;
         await cart.save();

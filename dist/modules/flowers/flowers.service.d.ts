@@ -48,11 +48,6 @@ export declare class FlowersService {
     remove(id: string): Promise<{
         message: string;
     }>;
-    updateStock(id: string, quantity: number): Promise<import("mongoose").Document<unknown, {}, FlowerDocument, {}> & Flower & import("mongoose").Document<unknown, any, any, Record<string, any>> & Required<{
-        _id: unknown;
-    }> & {
-        __v: number;
-    }>;
     getBestSellers(limit?: number): Promise<(import("mongoose").Document<unknown, {}, FlowerDocument, {}> & Flower & import("mongoose").Document<unknown, any, any, Record<string, any>> & Required<{
         _id: unknown;
     }> & {

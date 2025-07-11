@@ -12,7 +12,7 @@ let FormDataInterceptor = class FormDataInterceptor {
     intercept(context, next) {
         const request = context.switchToHttp().getRequest();
         if (request.body) {
-            const numericFields = ['originalPrice', 'salePrice', 'stock', 'weight', 'height', 'diameter'];
+            const numericFields = ['originalPrice', 'salePrice', 'weight', 'height', 'diameter'];
             const booleanFields = ['isActive', 'isAvailable'];
             const arrayFields = ['colors', 'gallery'];
             numericFields.forEach(field => {

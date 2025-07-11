@@ -6,7 +6,6 @@ export declare class CreateFlowerDto {
     category: string;
     imageUrl?: string;
     gallery?: string[];
-    stock: number;
     isActive?: boolean;
     isAvailable?: boolean;
     occasion?: string;

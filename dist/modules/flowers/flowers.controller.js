@@ -64,7 +64,6 @@ let FlowersController = class FlowersController {
             keywords: `${flower.name}, hoa tươi, ${flower.category?.toLowerCase()}, shop hoa, ${flower.colors?.join(', ')}`,
             ogImage: flower.imageUrl,
             price: flower.salePrice || flower.originalPrice,
-            availability: flower.isAvailable ? 'InStock' : 'OutOfStock',
             category: flower.category
         };
     }

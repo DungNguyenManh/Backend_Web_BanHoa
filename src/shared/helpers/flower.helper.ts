@@ -22,19 +22,7 @@ export class FlowerHelper {
         }
     }
 
-    // Format response cho flower (loại bỏ sensitive data)
-    static sanitizeFlower(flower: any) {
-        return {
-            _id: flower._id,
-            name: flower.name,
-            description: flower.description,
-            price: flower.price,
-            category: flower.category,
-            image: flower.image,
-            stock: flower.stock,
-            isAvailable: flower.isAvailable,
-        };
-    }
+
 
     // Validate price
     static validatePrice(price: number): void {
@@ -43,10 +31,4 @@ export class FlowerHelper {
         }
     }
 
-    // Validate stock
-    static validateStock(stock: number): void {
-        if (stock < 0) {
-            throw new BadRequestException('Số lượng hoa không thể âm');
-        }
-    }
 }

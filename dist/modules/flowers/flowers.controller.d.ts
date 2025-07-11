@@ -65,7 +65,6 @@ export declare class FlowersController {
         keywords: string;
         ogImage: string | undefined;
         price: number;
-        availability: string;
         category: string;
     }>;
     getSitemapData(): Promise<{

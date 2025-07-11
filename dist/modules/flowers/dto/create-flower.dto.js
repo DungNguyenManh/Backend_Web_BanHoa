@@ -39,7 +39,6 @@ class CreateFlowerDto {
     category;
     imageUrl;
     gallery;
-    stock;
     isActive;
     isAvailable;
     occasion;
@@ -91,13 +90,6 @@ __decorate([
     (0, class_validator_1.IsString)({ each: true }),
     __metadata("design:type", Array)
 ], CreateFlowerDto.prototype, "gallery", void 0);
-__decorate([
-    (0, class_validator_1.IsNotEmpty)({ message: 'Số lượng tồn kho không được để trống' }),
-    (0, class_transformer_1.Type)(() => Number),
-    (0, class_validator_1.IsNumber)({}, { message: 'Số lượng tồn kho phải là số' }),
-    (0, class_validator_1.Min)(0, { message: 'Số lượng tồn kho phải lớn hơn hoặc bằng 0' }),
-    __metadata("design:type", Number)
-], CreateFlowerDto.prototype, "stock", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_transformer_1.Transform)(({ value }) => value === 'true' || value === true),

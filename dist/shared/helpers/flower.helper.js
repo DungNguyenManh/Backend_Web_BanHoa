@@ -16,26 +16,9 @@ class FlowerHelper {
             throw new common_1.BadRequestException(`Tên hoa "${name}" đã tồn tại`);
         }
     }
-    static sanitizeFlower(flower) {
-        return {
-            _id: flower._id,
-            name: flower.name,
-            description: flower.description,
-            price: flower.price,
-            category: flower.category,
-            image: flower.image,
-            stock: flower.stock,
-            isAvailable: flower.isAvailable,
-        };
-    }
     static validatePrice(price) {
         if (price <= 0) {
             throw new common_1.BadRequestException('Giá hoa phải lớn hơn 0');
-        }
-    }
-    static validateStock(stock) {
-        if (stock < 0) {
-            throw new common_1.BadRequestException('Số lượng hoa không thể âm');
         }
     }
 }

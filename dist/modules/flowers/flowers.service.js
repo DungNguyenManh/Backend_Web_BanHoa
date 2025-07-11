@@ -28,13 +28,12 @@ let FlowersService = class FlowersService {
         this.cloudinaryService = cloudinaryService;
     }
     async createWithGallery(createFlowerDto, images = []) {
-        const { name, category, originalPrice, stock, imageUrl } = createFlowerDto;
+        const { name, category, originalPrice, imageUrl } = createFlowerDto;
         await util_1.FlowerHelper.checkFlowerNameExists(this.flowerModel, name);
         if (!(0, category_schema_1.isValidCategory)(category)) {
             throw new common_1.BadRequestException(`Danh mục "${category}" không hợp lệ`);
         }
         util_1.FlowerHelper.validatePrice(originalPrice);
-        util_1.FlowerHelper.validateStock(stock);
         const hasImageUrl = imageUrl && imageUrl.trim().length > 0;
         const hasUploadedImages = images && images.length > 0;
         if (!hasImageUrl && !hasUploadedImages) {
@@ -92,9 +91,6 @@ let FlowersService = class FlowersService {
         }
         if (isAvailable !== undefined) {
             filter.isAvailable = isAvailable;
-            if (isAvailable) {
-                filter.stock = { $gt: 0 };
-            }
         }
         const sort = {};
         sort[sortBy] = sortOrder === 'asc' ? 1 : -1;
@@ -133,7 +129,7 @@ let FlowersService = class FlowersService {
     }
     async update(id, updateFlowerDto) {
         await util_1.FlowerHelper.checkFlowerExists(this.flowerModel, id);
-        const { name, category, originalPrice, stock } = updateFlowerDto;
+        const { name, category, originalPrice } = updateFlowerDto;
         if (name) {
             await util_1.FlowerHelper.checkFlowerNameExists(this.flowerModel, name, id);
         }
@@ -142,9 +138,6 @@ let FlowersService = class FlowersService {
         }
         if (originalPrice !== undefined) {
             util_1.FlowerHelper.validatePrice(originalPrice);
-        }
-        if (stock !== undefined) {
-            util_1.FlowerHelper.validateStock(stock);
         }
         const updateData = { ...updateFlowerDto };
         if (category) {
@@ -163,21 +156,6 @@ let FlowersService = class FlowersService {
         return {
             message: 'Xóa hoa thành công'
         };
-    }
-    async updateStock(id, quantity) {
-        const flower = await this.flowerModel.findById(id);
-        if (!flower) {
-            throw new common_1.NotFoundException('Hoa không tồn tại');
-        }
-        if (flower.stock < quantity) {
-            throw new common_1.BadRequestException('Không đủ hàng trong kho');
-        }
-        flower.stock -= quantity;
-        if (flower.stock === 0) {
-            flower.isAvailable = false;
-        }
-        await flower.save();
-        return flower;
     }
     async getBestSellers(limit = 10) {
         return this.flowerModel
