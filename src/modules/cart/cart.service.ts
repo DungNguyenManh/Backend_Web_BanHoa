@@ -97,7 +97,12 @@ export class CartService {
 
         // Không kiểm tra số lượng tồn kho nữa
 
-        cart.items[itemIndex].quantity = quantity;
+        if (quantity <= 0) {
+            // Nếu số lượng <= 0 thì xóa sản phẩm khỏi giỏ
+            cart.items.splice(itemIndex, 1);
+        } else {
+            cart.items[itemIndex].quantity = quantity;
+        }
         await cart.save();
         await cart.populate('items.flowerId', 'name imageUrl originalPrice salePrice');
 
