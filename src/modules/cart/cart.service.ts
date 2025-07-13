@@ -15,10 +15,11 @@ export class CartService {
 
     // Lấy giỏ hàng của user (tạo mới nếu chưa có)
     async getCart(userId: string) {
-        let cart = await this.cartModel.findOne({ userId }).populate('items.flowerId', 'name imageUrl originalPrice salePrice');
+        let cart = await this.cartModel.findOne({ userId: String(userId) }).populate('items.flowerId', 'name imageUrl originalPrice salePrice');
 
         if (!cart) {
-            cart = await this.cartModel.create({ userId, items: [] });
+            if (!userId) throw new Error('userId is required when creating cart');
+            cart = await this.cartModel.create({ userId: String(userId), items: [] });
         }
 
         return {
