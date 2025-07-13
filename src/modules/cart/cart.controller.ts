@@ -21,7 +21,7 @@ export class CartController {
     })
     @ApiResponse({ status: 200, description: 'Thông tin giỏ hàng' })
     @ApiResponse({ status: 401, description: 'Chưa đăng nhập' })
-    getCart(@CurrentUser('id') userId: string) {
+    getCart(@CurrentUser('_id') userId: string) {
         return this.cartService.getCart(userId);
     }
 
@@ -47,8 +47,7 @@ export class CartController {
     @ApiResponse({ status: 200, description: 'Cập nhật thành công' })
     @ApiResponse({ status: 400, description: 'Số lượng không hợp lệ' })
     @ApiResponse({ status: 404, description: 'Hoa không có trong giỏ' })
-    updateCartItem(
-        @CurrentUser('id') userId: string,
+    updateCartItem(@CurrentUser('_id') userId: string,
         @Param('flowerId') flowerId: string,
         @Body() updateCartItemDto: UpdateCartItemDto
     ) {
@@ -63,7 +62,7 @@ export class CartController {
     })
     @ApiResponse({ status: 200, description: 'Xóa thành công' })
     @ApiResponse({ status: 404, description: 'Hoa không có trong giỏ' })
-    removeFromCart(@CurrentUser('id') userId: string, @Param('flowerId') flowerId: string) {
+    removeFromCart(@CurrentUser('_id') userId: string, @Param('flowerId') flowerId: string) {
         return this.cartService.removeFromCart(userId, flowerId);
     }
 
@@ -74,7 +73,7 @@ export class CartController {
         description: 'Xóa tất cả hoa trong giỏ hàng. Cần đăng nhập.'
     })
     @ApiResponse({ status: 200, description: 'Xóa toàn bộ giỏ thành công' })
-    clearCart(@CurrentUser('id') userId: string) {
+    clearCart(@CurrentUser('_id') userId: string) {
         return this.cartService.clearCart(userId);
     }
 }
