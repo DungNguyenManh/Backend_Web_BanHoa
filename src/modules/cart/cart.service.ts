@@ -15,17 +15,26 @@ export class CartService {
 
     // Lấy giỏ hàng của user (tạo mới nếu chưa có)
     async getCart(userId: string) {
-        let cart = await this.cartModel.findOne({ userId: String(userId) }).populate('items.flowerId', 'name imageUrl originalPrice salePrice');
-
-        if (!cart) {
-            if (!userId) throw new Error('userId is required when creating cart');
-            cart = await this.cartModel.create({ userId: String(userId), items: [] });
+        try {
+            let cart = await this.cartModel.findOne({ userId: String(userId) }).populate('items.flowerId', 'name imageUrl originalPrice salePrice');
+            if (!cart) {
+                // Nếu chưa có giỏ hàng thì trả về giỏ rỗng, không tạo mới
+                return {
+                    message: 'Lấy giỏ hàng thành công',
+                    data: { userId: String(userId), items: [] }
+                };
+            }
+            return {
+                message: 'Lấy giỏ hàng thành công',
+                data: cart
+            };
+        } catch (error) {
+            return {
+                message: 'Lỗi lấy giỏ hàng',
+                data: { userId: String(userId), items: [] },
+                error: error.message
+            };
         }
-
-        return {
-            message: 'Lấy giỏ hàng thành công',
-            data: cart
-        };
     }
 
     // Thêm hoa vào giỏ
