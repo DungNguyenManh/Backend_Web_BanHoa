@@ -5,16 +5,20 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { User, UserDocument, UserRole } from './schemas/user.schema';
+import { MailService } from '../mail/mail.service';
 import { UserUtil } from './helpers/util';
 
 @Injectable()
 export class UsersService {
   private readonly userModel: Model<UserDocument>;
+  private readonly mailService: MailService;
 
   constructor(
     @InjectModel(User.name) userModel: Model<UserDocument>,
+    mailService: MailService,
   ) {
     this.userModel = userModel;
+    this.mailService = mailService;
   }
   // Gửi mã xác nhận quên mật khẩu về email
   async requestPasswordReset(email: string) {
@@ -29,8 +33,13 @@ export class UsersService {
     user.resetPasswordCode = code;
     user.resetPasswordExpires = expires;
     await user.save();
-    // Nếu không gửi mail thì chỉ trả về mã xác nhận (chỉ dùng cho dev/test)
-    return { message: 'Đã tạo mã xác nhận', code };
+    // Gửi mã xác nhận dạng text đơn giản
+    await this.mailService.sendMail({
+      to: user.email,
+      subject: 'Yêu cầu đặt lại mật khẩu',
+      code,
+    });
+    return { message: 'Đã gửi mã xác nhận về email' };
   }
 
   // Đặt lại mật khẩu bằng mã xác nhận

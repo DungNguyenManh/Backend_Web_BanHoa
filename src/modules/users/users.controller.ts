@@ -8,12 +8,12 @@ import { RolesGuard } from '../../shared/guards/roles.guard';
 import { Roles, UserRole } from '../../shared/decorators/roles.decorator';
 
 @Controller('users')
-@UseGuards(JwtAuthGuard, RolesGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
   // Chỉ ADMIN mới được tạo user mới
   @Post()
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
@@ -21,6 +21,7 @@ export class UsersController {
 
   // Chỉ ADMIN mới được xem danh sách tất cả user
   @Get()
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
   async findAll(
     @Query() query: string,
@@ -32,6 +33,7 @@ export class UsersController {
 
   // Chỉ ADMIN mới được xem chi tiết user
   @Get(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(id);
@@ -46,12 +48,14 @@ export class UsersController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }
 
   // Chỉ ADMIN mới được xóa user
   @Delete(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
   remove(@Param('id') id: string) {
     return this.usersService.remove(id);
@@ -59,6 +63,7 @@ export class UsersController {
 
   // Chỉ ADMIN mới được kích hoạt tài khoản user
   @Patch(':id/activate')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
   activateUser(@Param('id') id: string) {
     return this.usersService.activateUser(id);
@@ -66,6 +71,7 @@ export class UsersController {
 
   // Chỉ ADMIN mới được vô hiệu hóa tài khoản user
   @Patch(':id/deactivate')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
   deactivateUser(@Param('id') id: string) {
     return this.usersService.toggleUserStatus(id, false);
@@ -76,7 +82,7 @@ export class UsersController {
   async requestPasswordReset(@Body('email') email: string) {
     return this.usersService.requestPasswordReset(email);
   }
-  
+
   // Đặt lại mật khẩu bằng mã xác nhận (public)
   @Post('reset-password')
   async resetPassword(
