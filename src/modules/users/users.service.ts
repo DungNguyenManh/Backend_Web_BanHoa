@@ -9,10 +9,52 @@ import { UserUtil } from './helpers/util';
 
 @Injectable()
 export class UsersService {
+  private readonly userModel: Model<UserDocument>;
 
   constructor(
-    @InjectModel(User.name) private userModel: Model<UserDocument>,
-  ) { }
+    @InjectModel(User.name) userModel: Model<UserDocument>,
+  ) {
+    this.userModel = userModel;
+  }
+  // Gửi mã xác nhận quên mật khẩu về email
+  async requestPasswordReset(email: string) {
+    const user = await this.userModel.findOne({ email });
+    if (!user) {
+      throw new BadRequestException('Email không tồn tại');
+    }
+    // Tạo mã xác nhận 6 số
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    // Hạn sử dụng mã: 10 phút
+    const expires = new Date(Date.now() + 10 * 60 * 1000);
+    user.resetPasswordCode = code;
+    user.resetPasswordExpires = expires;
+    await user.save();
+    // Nếu không gửi mail thì chỉ trả về mã xác nhận (chỉ dùng cho dev/test)
+    return { message: 'Đã tạo mã xác nhận', code };
+  }
+
+  // Đặt lại mật khẩu bằng mã xác nhận
+  async resetPassword(email: string, code: string, newPassword: string, confirmNewPassword: string) {
+    if (newPassword !== confirmNewPassword) {
+      throw new BadRequestException('Xác nhận mật khẩu mới không khớp');
+    }
+    const user = await this.userModel.findOne({ email });
+    if (!user || !user.resetPasswordCode || !user.resetPasswordExpires) {
+      throw new BadRequestException('Yêu cầu không hợp lệ hoặc đã hết hạn');
+    }
+    if (user.resetPasswordCode !== code) {
+      throw new BadRequestException('Mã xác nhận không đúng');
+    }
+    if (user.resetPasswordExpires < new Date()) {
+      throw new BadRequestException('Mã xác nhận đã hết hạn');
+    }
+    // Đổi mật khẩu
+    user.password = await UserUtil.hashPassword(newPassword);
+    user.resetPasswordCode = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+    return { message: 'Đặt lại mật khẩu thành công' };
+  }
 
   // Tạo người dùng mới (Admin tạo - default ADMIN role, active: true)
   async create(createUserDto: CreateUserDto) {

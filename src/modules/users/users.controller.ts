@@ -70,4 +70,21 @@ export class UsersController {
   deactivateUser(@Param('id') id: string) {
     return this.usersService.toggleUserStatus(id, false);
   }
+  
+  // Gửi mã xác nhận quên mật khẩu về email (public)
+  @Post('request-password-reset')
+  async requestPasswordReset(@Body('email') email: string) {
+    return this.usersService.requestPasswordReset(email);
+  }
+  
+  // Đặt lại mật khẩu bằng mã xác nhận (public)
+  @Post('reset-password')
+  async resetPassword(
+    @Body('email') email: string,
+    @Body('code') code: string,
+    @Body('newPassword') newPassword: string,
+    @Body('confirmNewPassword') confirmNewPassword: string,
+  ) {
+    return this.usersService.resetPassword(email, code, newPassword, confirmNewPassword);
+  }
 }

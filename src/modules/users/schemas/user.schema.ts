@@ -30,6 +30,13 @@ export class User {
 
     @Prop({ default: false })
     isActive: boolean;
+
+    // Quên mật khẩu: mã xác nhận và hạn sử dụng
+    @Prop()
+    resetPasswordCode?: string;
+
+    @Prop()
+    resetPasswordExpires?: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
