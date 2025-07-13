@@ -29,6 +29,7 @@ export class CartService {
 
     // Thêm hoa vào giỏ
     async addToCart(userId: string, addToCartDto: AddToCartDto) {
+        console.log('[AddToCart]', { userId, flowerId: addToCartDto.flowerId, quantity: addToCartDto.quantity });
         const { flowerId, quantity } = addToCartDto;
 
         // Kiểm tra hoa có tồn tại và còn hàng không
