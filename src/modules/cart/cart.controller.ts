@@ -34,7 +34,7 @@ export class CartController {
     @ApiResponse({ status: 201, description: 'Thêm vào giỏ thành công' })
     @ApiResponse({ status: 400, description: 'Dữ liệu không hợp lệ hoặc hết hàng' })
     @ApiResponse({ status: 404, description: 'Hoa không tồn tại' })
-    addToCart(@CurrentUser('id') userId: string, @Body() addToCartDto: AddToCartDto) {
+    addToCart(@CurrentUser('_id') userId: string, @Body() addToCartDto: AddToCartDto) {
         return this.cartService.addToCart(userId, addToCartDto);
     }
 

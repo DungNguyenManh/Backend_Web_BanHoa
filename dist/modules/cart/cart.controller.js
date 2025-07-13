@@ -64,7 +64,7 @@ __decorate([
     (0, swagger_1.ApiResponse)({ status: 201, description: 'Thêm vào giỏ thành công' }),
     (0, swagger_1.ApiResponse)({ status: 400, description: 'Dữ liệu không hợp lệ hoặc hết hàng' }),
     (0, swagger_1.ApiResponse)({ status: 404, description: 'Hoa không tồn tại' }),
-    __param(0, (0, current_user_decorator_1.CurrentUser)('id')),
+    __param(0, (0, current_user_decorator_1.CurrentUser)('_id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, add_to_cart_dto_1.AddToCartDto]),

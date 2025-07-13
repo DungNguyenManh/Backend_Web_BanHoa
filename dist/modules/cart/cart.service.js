@@ -81,7 +81,12 @@ let CartService = class CartService {
         if (quantity === undefined) {
             throw new common_1.BadRequestException('Số lượng không được để trống');
         }
-        cart.items[itemIndex].quantity = quantity;
+        if (quantity <= 0) {
+            cart.items.splice(itemIndex, 1);
+        }
+        else {
+            cart.items[itemIndex].quantity = quantity;
+        }
         await cart.save();
         await cart.populate('items.flowerId', 'name imageUrl originalPrice salePrice');
         return {
