@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Order } from './schemas/order.schema';
 import { Cart } from '../cart/schemas/cart.schema';
 
@@ -18,7 +18,7 @@ export class OrdersService {
     }
     const total = cart.items.reduce((sum, item) => sum + (item.salePrice || item.price) * item.quantity, 0);
     const order = await this.orderModel.create({
-      userId,
+      userId: typeof userId === 'string' ? new Types.ObjectId(userId) : userId,
       items: cart.items.map(i => ({
         flowerId: i.flowerId,
         quantity: i.quantity,

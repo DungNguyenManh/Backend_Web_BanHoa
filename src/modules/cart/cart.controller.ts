@@ -6,6 +6,7 @@ import { UpdateCartItemDto } from './dto/update-cart-item.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../../shared/decorators/current-user.decorator';
 import { OrdersService } from '../orders/orders.service';
+import { Types } from 'mongoose';
 
 @ApiTags('Cart')
 @Controller('cart')
