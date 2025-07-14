@@ -9,7 +9,6 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../shared/guards/roles.guard';
 import { Roles, UserRole } from '../../shared/decorators/roles.decorator';
 import { multerConfig } from './config/multer.config';
-import { FormDataInterceptor } from './interceptors/form-data.interceptor';
 
 @ApiTags('Flowers')
 @Controller('flowers')
