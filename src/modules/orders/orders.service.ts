@@ -12,13 +12,16 @@ export class OrdersService {
   ) {}
 
   async checkout(userId: string) {
+    // Lấy giỏ hàng của user
     const cart = await this.cartModel.findOne({ userId });
     if (!cart || !cart.items.length) {
       throw new NotFoundException('Giỏ hàng trống');
     }
+    // Tính tổng tiền
     const total = cart.items.reduce((sum, item) => sum + (item.salePrice || item.price) * item.quantity, 0);
+    // Tạo đơn hàng mới
     const order = await this.orderModel.create({
-      userId: typeof userId === 'string' ? new Types.ObjectId(userId) : userId,
+      userId: new Types.ObjectId(userId),
       items: cart.items.map(i => ({
         flowerId: i.flowerId,
         quantity: i.quantity,
@@ -28,13 +31,16 @@ export class OrdersService {
       total,
       status: 'PENDING',
     });
+    // Xóa sạch giỏ hàng sau khi đặt
     cart.items = [];
     await cart.save();
+    // Trả về đơn hàng vừa đặt
     return { message: 'Đặt hàng thành công', data: order };
   }
 
   async getOrders(userId: string) {
-    return this.orderModel.find({ userId }).sort({ createdAt: -1 });
+    // Trả về các đơn hàng của user, mới nhất lên đầu
+    return this.orderModel.find({ userId: new Types.ObjectId(userId) }).sort({ createdAt: -1 });
   }
   // ADMIN: Lấy tất cả đơn hàng (có thể lọc theo trạng thái)
   async getAllOrders(status?: string) {
