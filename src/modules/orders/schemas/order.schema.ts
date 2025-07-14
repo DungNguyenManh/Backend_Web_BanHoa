@@ -3,8 +3,8 @@ import { Document, Types } from 'mongoose';
 
 @Schema({ timestamps: true })
 export class Order extends Document {
-  @Prop({ required: true })
-  userId: string;
+  @Prop({ type: Types.ObjectId, ref: 'User', required: true })
+  userId: Types.ObjectId;
 
   @Prop({
     type: [
