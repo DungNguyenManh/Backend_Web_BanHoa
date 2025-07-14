@@ -36,4 +36,16 @@ export class OrdersService {
   async getOrders(userId: string) {
     return this.orderModel.find({ userId }).sort({ createdAt: -1 });
   }
+  // ADMIN: Lấy tất cả đơn hàng (có thể lọc theo trạng thái)
+  async getAllOrders(status?: string) {
+    const filter = status ? { status } : {};
+    return this.orderModel.find(filter).sort({ createdAt: -1 });
+  }
+
+  // ADMIN: Xem chi tiết đơn hàng
+  async getOrderDetail(orderId: string) {
+    const order = await this.orderModel.findById(orderId);
+    if (!order) throw new NotFoundException('Không tìm thấy đơn hàng');
+    return order;
+  }
 }

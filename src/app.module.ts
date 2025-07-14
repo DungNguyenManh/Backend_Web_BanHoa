@@ -8,6 +8,7 @@ import { CategoriesModule } from './modules/categories/categories.module';
 import { CartModule } from './modules/cart/cart.module';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
+import { OrdersModule } from './modules/orders/orders.module';
 
 
 @Module({
@@ -21,6 +22,7 @@ import { DatabaseModule } from './database/database.module';
     CategoriesModule,
     FlowersModule,
     CartModule,
+    OrdersModule, // Import OrdersModule here
   ],
   controllers: [AppController],
   providers: [AppService],
