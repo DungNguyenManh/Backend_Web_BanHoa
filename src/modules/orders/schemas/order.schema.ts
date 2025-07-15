@@ -32,6 +32,13 @@ export class Order extends Document {
 
   @Prop({ default: 'PENDING' })
   status: string;
+
+  // BỔ SUNG CÁC TRƯỜNG DƯỚI ĐÂY
+  @Prop() recipientName: string;
+  @Prop() recipientPhone: string;
+  @Prop() shippingAddress: string;
+  @Prop() note: string;
+  @Prop() paymentMethod: string;
 }
 
 export const OrderSchema = SchemaFactory.createForClass(Order);
