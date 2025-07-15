@@ -11,14 +11,6 @@ import { UserRole } from '../../shared/decorators/roles.decorator';
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
-  @Post('checkout')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Thanh toán giỏ hàng', description: 'Chuyển giỏ hàng thành đơn hàng, xóa giỏ hàng sau khi đặt.' })
-  @ApiResponse({ status: 201, description: 'Đặt hàng thành công' })
-  async checkout(@Req() req) {
-    return this.ordersService.checkout(req.user.userId || req.user._id);
-  }
 
   // ADMIN: Xem tất cả đơn hàng
   @Get()

@@ -1,42 +1,15 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Order } from './schemas/order.schema';
-import { Cart } from '../cart/schemas/cart.schema';
 
 @Injectable()
 export class OrdersService {
   constructor(
     @InjectModel(Order.name) private orderModel: Model<Order>,
-    @InjectModel(Cart.name) private cartModel: Model<Cart>,
   ) {}
 
-  async checkout(userId: string) {
-    // Lấy giỏ hàng của user
-    const cart = await this.cartModel.findOne({ userId });
-    if (!cart || !cart.items.length) {
-      throw new NotFoundException('Giỏ hàng trống');
-    }
-    // Tính tổng tiền
-    const total = cart.items.reduce((sum, item) => sum + (item.salePrice || item.price) * item.quantity, 0);
-    // Tạo đơn hàng mới
-    const order = await this.orderModel.create({
-      userId: new Types.ObjectId(userId),
-      items: cart.items.map(i => ({
-        flowerId: i.flowerId,
-        quantity: i.quantity,
-        price: i.price,
-        salePrice: i.salePrice,
-      })),
-      total,
-      status: 'PENDING',
-    });
-    // Xóa sạch giỏ hàng sau khi đặt
-    cart.items = [];
-    await cart.save();
-    // Trả về đơn hàng vừa đặt
-    return { message: 'Đặt hàng thành công', data: order };
-  }
+
 
   async getOrders(userId: string) {
     // Trả về các đơn hàng của user, mới nhất lên đầu

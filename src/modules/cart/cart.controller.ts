@@ -81,15 +81,4 @@ export class CartController {
     clearCart(@CurrentUser('_id') userId: string) {
         return this.cartService.clearCart(userId);
     }
-    // Đặt hàng: chuyển giỏ hàng thành đơn hàng thật
-    @Post('checkout')
-    @ApiOperation({
-        summary: '[USER] Đặt hàng',
-        description: 'Chuyển toàn bộ giỏ hàng thành đơn hàng thật, xóa giỏ hàng sau khi đặt.'
-    })
-    @ApiResponse({ status: 201, description: 'Đặt hàng thành công' })
-    @ApiResponse({ status: 400, description: 'Giỏ hàng trống hoặc lỗi' })
-    checkout(@CurrentUser('_id') userId: string) {
-        return this.ordersService.checkout(userId);
-    }
 }
