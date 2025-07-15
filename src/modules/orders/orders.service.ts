@@ -37,7 +37,7 @@ export class OrdersService {
       shippingAddress: checkoutInfo?.shippingAddress,
       note: checkoutInfo?.note,
       paymentMethod: checkoutInfo?.paymentMethod,
-      orderNumber: new Types.ObjectId().toHexString(), // sinh mã đơn hàng duy nhất
+      orderNumber: new Types.ObjectId().toHexString()
     });
     // Xóa sạch giỏ hàng sau khi đặt
     cart.items = [];

@@ -27,6 +27,9 @@ export class Order extends Document {
   @Prop({ required: true })
   total: number;
 
+  @Prop({ type: String, unique: true, required: true })
+  orderNumber: string;
+
   @Prop({ default: 'PENDING' })
   status: string;
 }
