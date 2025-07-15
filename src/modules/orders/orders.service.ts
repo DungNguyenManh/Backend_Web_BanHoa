@@ -47,9 +47,11 @@ export class OrdersService {
   }
 
   async getOrders(userId: string) {
-    // Trả về các đơn hàng của user, mới nhất lên đầu
-    return this.orderModel.find({ userId: new Types.ObjectId(userId) }).sort({ createdAt: -1 });
-  }
+  return this.orderModel
+    .find({ userId: new Types.ObjectId(userId) })
+    .populate('items.flowerId', 'name imageUrl originalPrice salePrice')
+    .sort({ createdAt: -1 });
+}
   // ADMIN: Lấy tất cả đơn hàng (có thể lọc theo trạng thái)
   async getAllOrders(status?: string) {
     const filter = status ? { status } : {};
