@@ -16,7 +16,7 @@ export class OrdersService {
   async checkout(userId: string, checkoutInfo?: CheckoutDto) {
     // Lấy giỏ hàng của user
     const cart = await this.cartModel.findOne({ userId });
-    if (!cart || !cart.items.length) {
+    if (!cart || !cart.items || cart.items.length === 0) {
       throw new NotFoundException('Giỏ hàng trống');
     }
     // Tính tổng tiền
@@ -37,6 +37,7 @@ export class OrdersService {
       shippingAddress: checkoutInfo?.shippingAddress,
       note: checkoutInfo?.note,
       paymentMethod: checkoutInfo?.paymentMethod,
+      orderNumber: new Types.ObjectId().toHexString(), // sinh mã đơn hàng duy nhất
     });
     // Xóa sạch giỏ hàng sau khi đặt
     cart.items = [];
@@ -44,8 +45,6 @@ export class OrdersService {
     // Trả về đơn hàng vừa đặt
     return { message: 'Đặt hàng thành công', data: orderDoc };
   }
-
-
 
   async getOrders(userId: string) {
     // Trả về các đơn hàng của user, mới nhất lên đầu
