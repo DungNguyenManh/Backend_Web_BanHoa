@@ -1,0 +1,12 @@
+Lưu mật khẩu 
+MONGO_URI=mongodb+srv://hoang31274:3C4yjHtO8BD4dGZ9@cluster0.hcv8c0e.mongodb.net/flower_shop?retryWrites=true&w=majority&appName=Cluster0&maxPoolSize=10&serverSelectionTimeoutMS=5000&socketTimeoutMS=45000
+JWT_SECRET=b38f830a38a36196f1c362f4b3b2c239b6a50e7be6ea0ebb44d1c4c1b3aff82bfe23f71b9cefb280f00213cdb4a7e1a2e44a575161beb89195e3ed4d93142c33
+
+MAIL_USER=hoang31274@gmail.com
+MAIL_PASS=wcvc zujf brpk bszl
+
+# Cloudinary Configuration
+CLOUDINARY_CLOUD_NAME=dpbvplnuj
+CLOUDINARY_API_KEY=185429376837479
+CLOUDINARY_API_SECRET=1KpvgO27mJtByHd2IP5rtI0TqXI
+MAIL_DEFAULT_TO=dung903698954@gmail.com
